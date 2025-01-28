@@ -742,17 +742,17 @@ Header Style
 }
 
 .main-banner .item-1 {
-  background-image: url(../images//bg1.png);
+  background-image: url(assets/images//bg1.png);
   max-height: 100%;
 }
 
 .main-banner .item-2 {
-  background-image: url(../GlowWithChloxo/assets/images/facial3.jpg);
+  background-image: url(/GlowWithChloxo/assets/images/facial3.jpg);
   
 }
 
 .main-banner .item-3 {
-  background-image: url(/assets/images/WhatsApp\ Image\ 2025-01-25\ at\ 09.59.05_abf3fef9.jpg);
+  background-image: url(../assets/images/WhatsApp\ Image\ 2025-01-25\ at\ 09.59.05_abf3fef9.jpg);
 }
 
 .main-banner .item span.category {
