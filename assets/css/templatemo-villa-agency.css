@@ -464,12 +464,12 @@ Header Style
 }
 
 .header-area .main-nav .nav li:last-child a {
-  background-color: #1e1e1e;
-  color: #fff;
+  background-color: transparent;
+  color: black;
   font-size: 14px;
   font-weight: 400;
   text-transform: none;
-  border-radius: 20px;
+  border-radius: 10px;
   padding-left: 0px;
 }
 
