@@ -1387,7 +1387,7 @@ Page Header Style
 */
 
 .page-heading {
-  background-image: url(/nailscomp.png);
+  background-image: url(/facialpic.png);
   background-position:center;
   background-repeat:repeat;
   background-size: cover;
@@ -1418,7 +1418,7 @@ Page Header Style
 }
  
 .page-heading1 {
-  background-image: url(/facialpic.png);
+  background-image: url(/nailscomp.png);
   background-position:center;
   background-repeat:repeat;
   background-size: cover;
@@ -1473,6 +1473,37 @@ Page Header Style
 }
 
 .page-heading2 h3 {
+  font-size: 48px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.page-heading3 {
+  background-image: url(/nailandfacial.png);
+  background-position:center;
+  background-repeat:repeat;
+  background-size: cover;
+  padding: 110px 0px;
+  text-align: center;
+}
+
+.page-heading3 span {
+  background-color: #fff;
+  color: #1e1e1e;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 10px 25px;
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+.page-heading3 span a {
+  color: #1e1e1e;
+}
+
+.page-heading3 h3 {
   font-size: 48px;
   font-weight: 900;
   text-transform: uppercase;
