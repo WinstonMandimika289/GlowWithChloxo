@@ -742,7 +742,7 @@ Header Style
 }
 
 .main-banner .item-1 {
-  background-image: url(/nails9.png);
+  background-image: url(/bg2.png);
   max-height: 100%;
 }
 
@@ -1230,7 +1230,7 @@ Contact Style
 */
 
 .contact {
-  background-image: url(../images/contact-bg.jpg);
+  background-image: url(/images/contact-bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -1383,7 +1383,7 @@ Page Header Style
 */
 
 .page-heading {
-  background-image: url(/Untitled\ \(9\).png);
+  background-image: url(/bg2.png);
   background-position:center;
   background-repeat:repeat;
   background-size: cover;
@@ -1414,7 +1414,7 @@ Page Header Style
 }
  
 .page-heading1 {
-  background-image: url(/Untitled\ \(16\).png);
+  background-image: url(/bg1.png);
   background-position:center;
   background-repeat:repeat;
   background-size: cover;
@@ -1445,7 +1445,7 @@ Page Header Style
 }
 
 .page-heading2 {
-  background-image: url(/GlowWithChloxo/assets/images/nailandfacial.png);
+  background-image: url(/nailandfacial.png);
   background-position:center;
   background-repeat:repeat;
   background-size: cover;
