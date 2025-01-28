@@ -1509,6 +1509,37 @@ Page Header Style
   text-transform: uppercase;
   color: #fff;
 }
+
+.page-heading4 {
+  background-image: url(/facialpic.png);
+  background-position:center;
+  background-repeat:repeat;
+  background-size: cover;
+  padding: 110px 0px;
+  text-align: center;
+}
+
+.page-heading4 span {
+  background-color: #fff;
+  color: #1e1e1e;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 10px 25px;
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+.page-heading4 span a {
+  color: #1e1e1e;
+}
+
+.page-heading4 h3 {
+  font-size: 48px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+}
 /* 
 ---------------------------------------------
 Properties Style
