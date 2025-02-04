@@ -1,4 +1,28 @@
+/*
 
+
+
+https://templatemo.com/tm-591-villa-agency
+
+*/
+
+/* ---------------------------------------------
+Table of contents
+------------------------------------------------
+01. font & reset css
+02. reset
+03. global styles
+04. header
+05. banner
+06. features
+07. testimonials
+08. contact
+09. footer
+
+--------------------------------------------- */
+/* 
+---------------------------------------------
+font & reset css
 --------------------------------------------- 
 */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900");
@@ -965,7 +989,7 @@ Video Style
 */
 
 .video {
-  background-image: url(/candles.jpg);
+  background-image: url(/pexels-elly-fairytale-3865712.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
