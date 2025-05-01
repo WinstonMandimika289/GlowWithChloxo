@@ -1,29 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <title>GLOW.WITH.CHLOXO    </title>
+    <title>GLOW.WITH.CHLOXO</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="assets/css/fontawesome.css">
     <link rel="stylesheet" href="assets/css/templatemo-villa-agency.css">
     <link rel="stylesheet" href="assets/css/owl.css">
     <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-<!--
-
-
--->
-  </head>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    
+    <!-- New CSS for service cards -->
+    <style>
+        .service-section {
+            padding: 60px 0;
+            background: #fff;
+        }
+        
+        .service-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: #2a2a2a;
+        }
+        
+        .services__wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+        
+        .services__card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .services__card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .services__card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .services__content {
+            padding: 20px;
+        }
+        
+        .services__content h3 {
+            margin-top: 0;
+            color: #2a2a2a;
+            font-size: 1.3rem;
+        }
+        
+        .services__content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .services__btn {
+            text-align: center;
+            padding: 0 20px 20px;
+        }
+        
+        .services__btn button {
+            background: #f35588;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .services__btn button:hover {
+            background: #d44a76;
+        }
+        
+        .price-duration {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #f35588;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px 20px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: #f35588;
+            color: white;
+            border-color: #f35588;
+        }
+    </style>
+</head>
 
 <body>
 
@@ -45,16 +147,14 @@
       <div class="row">
         <div class="col-lg-8 col-md-8">
           <ul class="info">
-            <li><img src="/old-typical-phone.png" alt="" style="max-width: 20px;"></i> 07376228588</li>
-            <li><img src="/mail.png" alt="" style="max-width: 20px;"></i> glowwithchloinfo@gmail.com</li>
-            <li><img src="/NewLogo.png" alt="" style="max-width: 50px;"></i></li>
+            <li><img src="/templatemo_591_villa_agency/assets/images/old-typical-phone.png" alt="" style="max-width: 20px;"> 07376228588</li>
+            <li><img src="/templatemo_591_villa_agency/assets/images/mail.png" alt="" style="max-width: 20px;"> glowwithchloinfo@gmail.com</li>
           </ul>
         </div>
         <div class="col-lg-4 col-md-4">
           <ul class="social-links">
             <li><a href="https://www.instagram.com/glow_with_chloxo/"><i class="fab fa-instagram"></i></a></li>
             <li><a href="https://www.facebook.com/profile.php?id=61566633030687"><i class="fab fa-facebook"></i></a></li>
-            <li><a href="https://www.tiktok.com/@glow_with_chlo"><i class="fab fa-tiktok"></i></a></li>
           </ul>
         </div>
       </div>
@@ -69,28 +169,22 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <a href="index.html" class="logo">
-                        <h1>GLOW.WITH.CHLO </h1>
-                      
-                        
-                      
-                       
-                 
+                        <h1>GLOW.WITH.CHLOXO</h1>
                     </a>
                     <!-- ***** Logo End ***** -->
-                   <!-- ***** Menu Start ***** -->
-                   <ul class="nav">
-                    
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="facial.html">Facials</a></li>
-                    <li><a href="Nails.html">Nails</a></li>
-                    <li><a href="FaceBoosters.html">Skin Booosters</a></li>
-                    <li><a href="price.html">Price List</a></li>
-                   <li><a href="http://glowwithchloxo.booksy.com">Book Appointment</a></li>
-                </ul>   
-                  <a class='menu-trigger'>
-                      <span>Menu</span>
-                  </a>
-                  <!-- ***** Menu End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                      <li><a href="index.html">Home</a></li>
+                      <li><a href="facial.html">Facials</a></li>
+                      <li><a href="Nails.html" class="active">Nails</a></li>
+                      <li><a href="price.html">Price List</a></li>
+                      <li><a href="contact.html">Contact Us</a></li>
+                      <li><a href="https://booksy.com/en-gb/#ba_s=seo"><i class="fa fa-calendar"></i> Book Appointment</a></li>
+                  </ul>   
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
                 </nav>
             </div>
         </div>
@@ -103,136 +197,171 @@
       <div class="row">
         <div class="col-lg-12">
           <span class="breadcrumb"><a href="#">Nail Care</a></span>
-          <h3>Nails</h3>
+          <h3>Nail Services</h3>
         </div>
       </div>
     </div>
   </div>
 
-  
-
-  <div class="section properties">
+  <!-- Service Cards Section -->
+  <section class="service-section">
     <div class="container">
-      <ul class="properties-filter">
-        <li>
-          <a class="is_active" href="#!" data-filter="*">Show all</a>
-        </li>
-        <li>
-          <a href="#!" data-filter=".adv">Acrylics</a>
-        </li>
-        <li>
-          <a href="#!" data-filter=".str">Gel Nails</a>
-        </li>
-        <li>
-          <a href="#!" data-filter=".rac">Manicures</a>
-        </li>
-        <li>
-          <a href="#!" data-filter=".fba">Pedicures</a>
-        </li>
-      </ul>
-      <div class="row properties-box">
-
-       
-        <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 rac adv">
-          <div class="item">
-            <img src="/nail2.jpg" style="max-height: 350px;" alt="">
-            <span class="category">Acrylics </span>
-            <h6>£20</h6>
-            <h4>Duration: <span>2H</span></h4>
-            <div class="main-button">
-              <a href="http://glowwithchloxo.booksy.com">Book</a>
-            </div>
-            
-            
-          </div>
-        </div>
-
-
-
-        <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 rac adv">
-          <div class="item">
-            <img src="/nailcare.jpg" style="max-height: 350px;" alt="">
-            <span class="category">Nail Care Treatment</span>
-            <h6>£20</h6>
-            <h4>Duration: <span>2H</span></h4>
-            <div class="main-button">
-              <a href="DermaDulxe.html">Book</a>
-            </div>
-            
-            
-          </div>
-        </div>
-
- 
-
-
-
-
-
-
-
-       
-        <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 str fba">
-          <div class="item">
-          
-          <img src="/nails7.jpg" style="max-height: 350px;" alt="">
-            <span class="category">Pedicure</span>
-            <h6>£30</h6>
-            <h4>Duration: <span>1H 40M</span></h4>
-            <div class="main-button">
-              <a href="DermaDulxe.html">Book</a>
-            </div>
-           
-          </div>
-
-        </div>
-
-        <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 str rac">
-          <div class="item">
-           <img src="/nails8.jpg" style="max-height: 350px;" alt="">
-            
-            <span class="category">Gel Nails </span>
-            <h6>£15</h6>
-            <h4>Duration: <span>40M</span></h4>
-            <div class="main-button">
-              <a href="DermaDulxe.html">Book</a>
-            </div>
-          
-          </div>
-        </div>
-
-
-
- 
-
-
+        <h2>Our Nail Services</h2>
         
-            
-          </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Show All</button>
+            <button class="filter-btn" data-filter="acrylic">Acrylics</button>
+            <button class="filter-btn" data-filter="gel">Gel Nails</button>
+            <button class="filter-btn" data-filter="manicure">Manicure</button>
+            <button class="filter-btn" data-filter="pedicure">Pedicure</button>
         </div>
-      </div>
-      
+        
+        <div class="services__wrapper">
+            <!-- Acrylic Service 1 -->
+            <div class="services__card" data-category="acrylic">
+                <img src="/templatemo_591_villa_agency/assets/images/nail1.jpg" alt="Acrylic Nails">
+                <div class="services__content">
+                    <h3>Classic Acrylic Set</h3>
+                    <div class="price-duration">
+                        <span>£70</span>
+                        <span>1 Hour</span>
+                    </div>
+                    <p>Beautiful, durable acrylic nails with your choice of shape and length.</p>
+                </div>
+                <div class="services__btn">
+                    <a href="https://booksy.com/en-gb/#ba_s=seo"><button>Book Now</button></a>
+                </div>
+            </div>
+            
+            <!-- Gel Service 1 -->
+            <div class="services__card" data-category="gel">
+                <img src="/templatemo_591_villa_agency/assets/images/nails4.jpg" alt="Gel Nails">
+                <div class="services__content">
+                    <h3>Premium Gel Extensions</h3>
+                    <div class="price-duration">
+                        <span>£150</span>
+                        <span>1 Hour 30 Min</span>
+                    </div>
+                    <p>Long-lasting gel extensions with a natural look and feel.</p>
+                </div>
+                <div class="services__btn">
+                    <a href="https://booksy.com/en-gb/#ba_s=seo"><button>Book Now</button></a>
+                </div>
+            </div>
+            
+            <!-- Manicure Service 1 -->
+            <div class="services__card" data-category="manicure">
+                <img src="/templatemo_591_villa_agency/assets/images/nail2.jpg" alt="Luxury Manicure">
+                <div class="services__content">
+                    <h3>Luxury Manicure</h3>
+                    <div class="price-duration">
+                        <span>£50</span>
+                        <span>45 Minutes</span>
+                    </div>
+                    <p>Includes nail shaping, cuticle care, exfoliation, massage, and polish.</p>
+                </div>
+                <div class="services__btn">
+                    <a href="https://booksy.com/en-gb/#ba_s=seo"><button>Book Now</button></a>
+                </div>
+            </div>
+            
+            <!-- Pedicure Service 1 -->
+            <div class="services__card" data-category="pedicure">
+                <img src="/templatemo_591_villa_agency/assets/images/nail3.jpg" alt="Spa Pedicure">
+                <div class="services__content">
+                    <h3>Spa Pedicure</h3>
+                    <div class="price-duration">
+                        <span>£60</span>
+                        <span>1 Hour</span>
+                    </div>
+                    <p>Relaxing foot soak, exfoliation, massage, and polish for beautiful feet.</p>
+                </div>
+                <div class="services__btn">
+                    <a href="https://booksy.com/en-gb/#ba_s=seo"><button>Book Now</button></a>
+                </div>
+            </div>
+            
+            <!-- Acrylic Service 2 -->
+            <div class="services__card" data-category="acrylic">
+                <img src="/templatemo_591_villa_agency/assets/images/nails4.jpg" alt="French Acrylic">
+                <div class="services__content">
+                    <h3>French Acrylic</h3>
+                    <div class="price-duration">
+                        <span>£85</span>
+                        <span>1 Hour 15 Min</span>
+                    </div>
+                    <p>Classic French tip acrylic nails for a timeless look.</p>
+                </div>
+                <div class="services__btn">
+                    <a href="https://booksy.com/en-gb/#ba_s=seo"><button>Book Now</button></a>
+                </div>
+            </div>
+            
+            <!-- Gel Service 2 -->
+            <div class="services__card" data-category="gel">
+                <img src="/templatemo_591_villa_agency/assets/images/nail1.jpg" alt="Gel Polish">
+                <div class="services__content">
+                    <h3>Gel Polish</h3>
+                    <div class="price-duration">
+                        <span>£40</span>
+                        <span>45 Minutes</span>
+                    </div>
+                    <p>Long-lasting gel polish application on natural nails.</p>
+                </div>
+                <div class="services__btn">
+                    <a href="https://booksy.com/en-gb/#ba_s=seo"><button>Book Now</button></a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+  </section>
 
   <footer>
     <div class="container">
       <div class="col-lg-12">
-        <p>Copyright © 2025 GLOW WITH CHLOXO. All rights reserved. 
-        
-        </p>
+        <p>Copyright © 2025 GLOW WITH CHLOXO. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="assets/js/isotope.min.js"></script>
   <script src="assets/js/owl-carousel.js"></script>
   <script src="assets/js/counter.js"></script>
   <script src="assets/js/custom.js"></script>
-
-  </body>
+  
+  <!-- New Filtering Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const serviceCards = document.querySelectorAll('.services__card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const filterValue = button.getAttribute('data-filter');
+                
+                // Filter cards
+                serviceCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Initialize all cards as visible
+        serviceCards.forEach(card => {
+            card.style.display = 'block';
+        });
+    });
+  </script>
+</body>
 </html>
