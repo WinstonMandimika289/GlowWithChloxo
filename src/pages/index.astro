@@ -110,13 +110,15 @@ const faqLd = {
             sizes="(max-width: 900px) 30vw, 12vw"
           />
         </div>
-        <a class="hero__badge" href={site.booking} target="_blank" rel="noopener" aria-label="Book your glow on Booksy">
+        <div class="hero__badge">
           <svg viewBox="0 0 120 120" class="hero__badge-ring" aria-hidden="true">
             <defs><path id="badge-circle" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"></path></defs>
             <text><textPath href="#badge-circle" textLength="280" lengthAdjust="spacing">Book your glow ✦ Book your glow ✦</textPath></text>
           </svg>
-          <span class="hero__badge-core"><Icon name="arrow" size={22} /></span>
-        </a>
+          <a class="hero__badge-link" href={site.booking} target="_blank" rel="noopener" aria-label="Book your glow on Booksy">
+            <span class="hero__badge-core"><Icon name="arrow" size={22} /></span>
+          </a>
+        </div>
         <a class="hero__card" href={serviceHref(signature)} data-reveal>
           <span class="hero__card-label">Signature facial</span>
           <strong>{signature.name}</strong>
@@ -542,6 +544,18 @@ const faqLd = {
   }
   .hero__badge:hover .hero__badge-core {
     transform: rotate(45deg) scale(1.08);
+  }
+  .hero__badge-link {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: inherit;
+  }
+  .hero__badge-link:focus-visible {
+    outline-offset: 4px;
+    border-radius: 50%;
   }
   .hero__card {
     position: absolute;

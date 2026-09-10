@@ -94,7 +94,7 @@ function preloader(): number {
   lenis?.stop();
   gsap
     .timeline({
-      delay: 1.15,
+      delay: 0.75,
       onComplete: () => {
         root.classList.remove('first-visit');
         el.removeAttribute('style');
@@ -103,7 +103,7 @@ function preloader(): number {
     })
     .to(el.querySelector('.preloader__inner'), { autoAlpha: 0, y: -24, duration: 0.5, ease: 'power2.in' })
     .to(el, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1, ease: 'expo.inOut' }, '-=0.15');
-  return 1.6;
+  return 1.2;
 }
 
 function splitHeadings() {
@@ -229,14 +229,15 @@ function counters() {
   });
 }
 
+/** Words "ink in" as you scroll. Colour (not opacity) keeps every word above 4:1 contrast. */
 function scrubText() {
   $$('[data-scrub-text]').forEach((el) => {
-    const split = SplitText.create(el, { type: 'words' });
+    const split = SplitText.create(el, { type: 'words', tag: 'span', aria: 'none' });
     gsap.fromTo(
       split.words,
-      { opacity: 0.16 },
+      { color: '#a36c58' },
       {
-        opacity: 1,
+        color: '#2b1a24',
         ease: 'none',
         stagger: 0.1,
         scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 50%', scrub: true },

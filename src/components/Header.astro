@@ -8,12 +8,13 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 
 <header class="site-header" data-header>
   <div class="site-header__inner container">
-    <a href="/" class="brand" aria-label={`${site.name} — home`}>
+    <a href="/" class="brand">
       <span class="brand__mark" aria-hidden="true">G</span>
       <span class="brand__word">
         <span class="brand__glow">Glow</span>
         <span class="brand__with">with Chlo</span>
       </span>
+      <span class="sr-only">— home</span>
     </a>
 
     <nav class="site-nav" aria-label="Main">
