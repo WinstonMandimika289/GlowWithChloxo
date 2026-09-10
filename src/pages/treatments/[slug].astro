@@ -110,6 +110,13 @@ const jsonLd = [
             <dd class="price">+£{site.mobileSurcharge}</dd>
           </div>
         </dl>
+        {
+          s.valueNote && (
+            <p class="t-hero__value" data-reveal>
+              <Icon name="sparkle" size={14} /> {s.valueNote}
+            </p>
+          )
+        }
 
         {
           s.highlights && (
@@ -364,6 +371,14 @@ const jsonLd = [
     margin: 0;
     font-size: var(--step-2);
     line-height: 1.2;
+  }
+  .t-hero__value {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--rose-gold-text);
   }
   .t-hero__highlights {
     display: flex;

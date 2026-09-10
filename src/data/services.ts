@@ -35,7 +35,10 @@ export interface Service {
   detailPage: boolean;
   signature?: boolean;
   addOn?: boolean;
+  /** Short qualifier shown next to the price (e.g. "Recommended between sets"). */
   note?: string;
+  /** Value message shown on the treatment's detail page. */
+  valueNote?: string;
 }
 
 const cleanse: Step = { title: 'Cleanse & prep', text: 'A refreshing double cleanse.' };
@@ -124,7 +127,7 @@ export const services: Service[] = [
     results: 'results/deluxe-meso-derma.jpg',
     resultsAlt: 'Before and after a Deluxe Mesotherapy & Dermaplaning facial, showing smoother, brighter skin',
     aliases: ['deluxe combo', 'ultimate glow', 'signature'],
-    note: 'Better value than booking both deluxe treatments separately.',
+    valueNote: 'Better value than booking both deluxe treatments separately.',
   },
   {
     slug: 'mesotherapy-dermaplaning',
@@ -157,7 +160,7 @@ export const services: Service[] = [
     results: 'results/meso-derma.jpg',
     resultsAlt: 'Before and after a Mesotherapy & Dermaplaning facial, showing brighter, more hydrated skin',
     aliases: ['combo', 'combination', 'perfect glow'],
-    note: 'Better value than booking both treatments separately.',
+    valueNote: 'Better value than booking both treatments separately.',
   },
   {
     slug: 'deluxe-dermaplaning',
@@ -199,8 +202,10 @@ export const services: Service[] = [
     highlights: ['Silky-smooth skin', 'Enhanced hydration', 'Instant brightness'],
     included: [cleanse, dermaplaning, liquidPeel, aloeGuaSha, handMassage],
     benefits: dermaBenefits,
-    image: 'results/dermaplaning.jpg',
-    imageAlt: 'Before and after dermaplaning, showing brighter, more even skin',
+    image: 'photos/dermaplaning-after.jpg',
+    imageAlt: 'Client with bright, smooth, glowing skin after dermaplaning',
+    results: 'results/dermaplaning.jpg',
+    resultsAlt: 'Before and after dermaplaning, showing brighter, more even skin',
     aliases: ['peach fuzz', 'derma planing'],
   },
   {

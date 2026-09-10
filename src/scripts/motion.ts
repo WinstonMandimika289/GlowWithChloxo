@@ -175,7 +175,15 @@ function clips() {
     gsap.fromTo(
       el,
       { clipPath: 'inset(100% 0% 0% 0%)' },
-      { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'expo.inOut', delay, scrollTrigger: trigger() },
+      {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        duration: 1.5,
+        ease: 'expo.inOut',
+        delay,
+        scrollTrigger: trigger(),
+        // Release the mask once revealed so rounded frames keep their soft shadows.
+        onComplete: () => gsap.set(el, { clipPath: 'none' }),
+      },
     );
     const media = el.querySelector('img');
     if (media) {

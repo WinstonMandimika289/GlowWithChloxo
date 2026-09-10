@@ -83,7 +83,8 @@ function mobileMenu() {
     }
   };
 
-  function open() {
+  /** Keyboard users get focus moved into the menu; pointer/touch users don't. */
+  function open(fromKeyboard = false) {
     clearTimeout(closeTimer);
     menu!.hidden = false;
     void menu!.offsetHeight; // commit the hidden → visible change before animating
@@ -94,7 +95,7 @@ function mobileMenu() {
     getLenis()?.stop();
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', onKey);
-    setTimeout(() => menu!.querySelector('a')?.focus({ preventScroll: true }), 250);
+    if (fromKeyboard) setTimeout(() => menu!.querySelector('a')?.focus({ preventScroll: true }), 250);
   }
 
   function close(restoreFocus = true) {
@@ -112,7 +113,8 @@ function mobileMenu() {
     if (restoreFocus) btn!.focus({ preventScroll: true });
   }
 
-  on(btn, 'click', () => (isOpen() ? close() : open()));
+  // A click with detail 0 came from the keyboard (Enter/Space).
+  on(btn, 'click', (e) => (isOpen() ? close() : open((e as MouseEvent).detail === 0)));
   on(menu, 'click', (e) => {
     if ((e.target as HTMLElement).closest('a')) close(false);
   });

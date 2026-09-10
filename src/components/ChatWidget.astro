@@ -36,7 +36,7 @@ import { CHAT } from '../lib/chatConfig';
         data-chat-input
         rows="1"
         maxlength={CHAT.maxInputChars}
-        placeholder="Ask about treatments, prices, booking…"
+        placeholder="Ask me anything…"
         autocomplete="off"></textarea>
       <button type="submit" class="chat__send" aria-label="Send message">
         <Icon name="send" size={18} />
@@ -45,7 +45,14 @@ import { CHAT } from '../lib/chatConfig';
     <p class="chat__note">Guidance only — Chlo confirms everything at your consultation.</p>
   </section>
 
-  <button type="button" class="chat__launcher" data-chat-launcher aria-expanded="false" aria-controls="chat-panel">
+  <button
+    type="button"
+    class="chat__launcher"
+    data-chat-launcher
+    aria-expanded="false"
+    aria-controls="chat-panel"
+    aria-label="Ask Glow, the chat assistant"
+  >
     <span class="chat__launcher-icon"><Icon name="chat" size={22} /></span>
     <span class="chat__launcher-label">Ask Glow</span>
   </button>
@@ -240,6 +247,8 @@ import { CHAT } from '../lib/chatConfig';
     padding: 1.1rem;
     overflow-y: auto;
     overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--petal) transparent;
   }
   .chat-msg {
     display: flex;
@@ -366,6 +375,8 @@ import { CHAT } from '../lib/chatConfig';
     font-size: 0.95rem;
     line-height: 1.4;
     resize: none;
+    overflow-y: auto;
+    scrollbar-width: none;
   }
   .chat__form textarea:focus {
     outline: none;
@@ -403,7 +414,8 @@ import { CHAT } from '../lib/chatConfig';
     .chat__launcher {
       padding: 0.45rem;
     }
-    .chat__launcher-label {
+    .chat__launcher-label,
+    .chat__teaser {
       display: none;
     }
     .chat.is-open {

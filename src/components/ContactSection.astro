@@ -35,18 +35,18 @@ const groups = [
           </a>
         </li>
         <li>
-          <a href={`mailto:${site.email}`} class="contact-card">
-            <span class="contact-card__icon"><Icon name="mail" /></span>
-            <span><small>Email</small>{site.email}</span>
-          </a>
-        </li>
-        <li>
           <div class="contact-card">
             <span class="contact-card__icon"><Icon name="pin" /></span>
             <span><small>Covering</small>{site.area}</span>
           </div>
         </li>
-        <li>
+        <li class="contact__cards-wide">
+          <a href={`mailto:${site.email}`} class="contact-card">
+            <span class="contact-card__icon"><Icon name="mail" /></span>
+            <span><small>Email</small>{site.email}</span>
+          </a>
+        </li>
+        <li class="contact__cards-wide">
           <div class="contact-card">
             <span class="contact-card__icon"><Icon name="car" /></span>
             <span><small>Mobile service</small>Comes to you for +£{site.mobileSurcharge}</span>
@@ -135,6 +135,9 @@ const groups = [
     gap: 0.9rem;
     padding: 0;
     margin: 0;
+  }
+  .contact__cards-wide {
+    grid-column: 1 / -1;
   }
   .contact-card {
     display: flex;
