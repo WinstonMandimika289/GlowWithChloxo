@@ -1,0 +1,41 @@
+---
+interface Props {
+  eyebrow?: string;
+  /** May contain <em> for the italic accent. */
+  title: string;
+  lead?: string;
+  align?: 'left' | 'center';
+  as?: 'h1' | 'h2';
+  size?: 'h1' | 'h2' | 'h3';
+  id?: string;
+  class?: string;
+}
+const { eyebrow, title, lead, align = 'left', as: Tag = 'h2', size = 'h2', id, class: className } = Astro.props;
+---
+
+<div class:list={['section-heading', `section-heading--${align}`, className]}>
+  {eyebrow && <p class="eyebrow" data-reveal>{eyebrow}</p>}
+  <Tag id={id} class={size} data-split set:html={title} />
+  {lead && <p class="lead" data-reveal>{lead}</p>}
+  <slot />
+</div>
+
+<style>
+  .section-heading {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    max-width: 44rem;
+  }
+  .section-heading--center {
+    justify-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+  .section-heading--center .lead {
+    margin-inline: auto;
+  }
+  .section-heading :global(.h2) {
+    max-width: 18ch;
+  }
+</style>

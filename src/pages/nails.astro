@@ -1,0 +1,197 @@
+---
+import { Picture } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PriceList from '../components/PriceList.astro';
+import Marquee from '../components/Marquee.astro';
+import Icon from '../components/Icon.astro';
+import { img } from '../lib/images';
+import { site } from '../data/site';
+import { nails, nailAddOns, formatPrice } from '../data/services';
+
+const gallery = [
+  { src: 'nails/nude-floral-french.jpg', alt: 'Soft nude French manicure with floral art and crystals' },
+  { src: 'nails/pink-heart-french.jpg', alt: 'Pink French tip nails with hand-drawn hearts' },
+  { src: 'nails/chocolate-marble-french.jpg', alt: 'Chocolate marble French nails with gold gem detail' },
+  { src: 'nails/green-gold-french.jpg', alt: 'Forest green French manicure with gold accents' },
+  { src: 'nails/mocha-floral-coffin.jpg', alt: 'Mocha coffin nails with hand-painted florals and gold gems' },
+  { src: 'nails/butterfly-stiletto.jpg', alt: 'White French stiletto nails with hand-painted butterflies' },
+  { src: 'nails/red-pedicure.jpg', alt: 'Classic red gel pedicure' },
+  { src: 'nails/red-pedicure-knit.jpg', alt: 'Red gel pedicure on a soft knit blanket' },
+];
+---
+
+<Layout
+  title="Nails"
+  description={`Gel, acrylic, manicures and pedicures in North Wales & Liverpool from ${formatPrice(Math.min(...nails.map((n) => n.price)))} — with nail art, gems and 3D flowers.`}
+  image="nails/nude-floral-french.jpg"
+>
+  <PageHero
+    eyebrow="Nails"
+    title="Nails, <em>beautifully</em> finished"
+    lead="Gel, acrylics, manicures and pedicures — hand-finished with nail art, gems and 3D flowers."
+    image="nails/chocolate-marble-french.jpg"
+    imageAlt="Chocolate marble French nails with gold gem detail"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Nails' }]}
+  >
+    <Fragment slot="actions">
+      <a class="btn" href={site.booking} target="_blank" rel="noopener" data-magnetic>
+        Book your nails <Icon name="arrow" class="btn__icon" size={16} />
+      </a>
+      <a class="btn btn--ghost" href="#nail-menu">See the menu</a>
+    </Fragment>
+  </PageHero>
+
+  <Marquee variant="serif" items={['Gel polish', 'Acrylic sets', 'French tips', 'Nail art', 'Gems', '3D flowers', 'Pedicures']} speed={45} />
+
+  <section class="section" id="nail-menu" aria-labelledby="nail-menu-title">
+    <div class="container nail-menu__grid">
+      <div class="nail-menu__head">
+        <SectionHeading
+          id="nail-menu-title"
+          eyebrow="The nail menu"
+          title="Polished, <em>perfected</em>"
+          lead="Long-lasting gel, strong acrylics and caring manicures & pedicures. Add a little extra with art, gems or flowers."
+        />
+        <div class="addons" data-reveal>
+          <p class="addons__title">Add-ons</p>
+          <ul role="list">
+            {
+              nailAddOns.map((a) => (
+                <li>
+                  <span>{a.name}</span>
+                  <span class="price">+{formatPrice(a.price)}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <PriceList items={nails} summaries />
+    </div>
+  </section>
+
+  <section class="section section--deep" aria-labelledby="nail-gallery-title">
+    <div class="container">
+      <SectionHeading id="nail-gallery-title" eyebrow="Recent sets" title="Fresh from the <em>studio</em>" align="center" />
+      <ul class="nail-gallery" role="list">
+        {
+          gallery.map((g, i) => (
+            <li class:list={['nail-gallery__item', { 'nail-gallery__item--tall': i % 3 === 0 }]}>
+              <figure data-clip>
+                <Picture src={img(g.src)} alt={g.alt} formats={['avif', 'webp']} widths={[300, 520, 760]} sizes="(max-width: 700px) 46vw, 24vw" />
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="nail-gallery__cta" data-reveal>
+        <a class="btn btn--ghost" href={site.socials[0].href} target="_blank" rel="noopener">
+          <Icon name="instagram" size={18} /> More sets on Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nail-menu__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .nail-menu__head {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    display: grid;
+    gap: 2rem;
+  }
+  .addons {
+    padding: 1.5rem;
+    border-radius: var(--r-lg);
+    background: var(--blush);
+  }
+  .addons__title {
+    margin-bottom: 0.75rem;
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rose-gold-text);
+  }
+  .addons ul {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+  }
+  .addons li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+  }
+  .addons li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .addons .price {
+    font-size: 1.2rem;
+  }
+
+  .nail-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: clamp(140px, 17vw, 240px);
+    grid-auto-flow: dense;
+    gap: clamp(0.6rem, 1.4vw, 1.1rem);
+    padding: 0;
+    margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+  }
+  .nail-gallery__item {
+    grid-row: span 1;
+  }
+  .nail-gallery__item--tall {
+    grid-row: span 2;
+  }
+  .nail-gallery__item figure {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--r-md);
+    background: var(--blush);
+  }
+  .nail-gallery__item :global(picture),
+  .nail-gallery__item :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .nail-gallery__item :global(img) {
+    transition: transform 1.2s var(--ease-out);
+  }
+  .nail-gallery__item:hover :global(img) {
+    transform: scale(1.06);
+  }
+  .nail-gallery__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .nail-menu__grid {
+      grid-template-columns: 1fr;
+    }
+    .nail-menu__head {
+      position: static;
+    }
+    .nail-gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

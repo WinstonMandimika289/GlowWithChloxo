@@ -1,0 +1,137 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: string[];
+  reverse?: boolean;
+  /** Seconds for one full loop */
+  speed?: number;
+  variant?: 'serif' | 'band' | 'outline';
+  tilt?: number;
+  class?: string;
+  label?: string;
+}
+const { items, reverse = false, speed = 40, variant = 'serif', tilt = 0, class: className, label } = Astro.props;
+---
+
+<div
+  class:list={['marquee', `marquee--${variant}`, { 'marquee--reverse': reverse }, className]}
+  style={`--duration:${speed}s; --tilt:${tilt}deg`}
+  data-marquee
+  role={label ? 'region' : undefined}
+  aria-label={label}
+>
+  <div class="marquee__track">
+    {
+      [0, 1].map((copy) => (
+        <ul class="marquee__group" role="list" aria-hidden={copy === 1 ? 'true' : undefined}>
+          {items.map((item) => (
+            <li class="marquee__item">
+              <span>{item}</span>
+              <Icon name="sparkle" class="marquee__sep" size={20} />
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    --gap: clamp(1.5rem, 3vw, 3rem);
+    position: relative;
+    overflow: hidden;
+    transform: rotate(var(--tilt));
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--duration) linear infinite;
+    will-change: transform;
+  }
+  .marquee--reverse .marquee__track {
+    animation-direction: reverse;
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+  .marquee__group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--gap);
+    padding: 0 var(--gap) 0 0;
+    margin: 0;
+  }
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap);
+    white-space: nowrap;
+  }
+  .marquee__item :global(.marquee__sep) {
+    flex-shrink: 0;
+    color: var(--rose-gold);
+  }
+
+  /* variants */
+  .marquee--serif {
+    padding-block: 1.4rem;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .marquee--serif .marquee__item:nth-child(even) span {
+    font-style: normal;
+    color: var(--rose-gold-text);
+  }
+  .marquee--band {
+    padding-block: 1rem;
+    background: var(--ink);
+    color: var(--on-dark);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .marquee--band .marquee__item :global(.marquee__sep) {
+    color: var(--petal);
+    width: 16px;
+    height: 16px;
+  }
+  .marquee--outline {
+    padding-block: 1rem;
+    font-family: var(--font-display);
+    font-size: var(--step-6);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--rose-gold);
+  }
+  .marquee--outline .marquee__item :global(.marquee__sep) {
+    width: 0.4em;
+    height: 0.4em;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+    .marquee {
+      overflow-x: auto;
+    }
+  }
+</style>

@@ -1,0 +1,224 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo.png';
+import { nav, site } from '../data/site';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cta">
+      <p class="eyebrow">Ready when you are</p>
+      <h2 class="footer-cta__title" data-split>Let’s bring out <em>your glow</em></h2>
+      <div class="footer-cta__actions" data-reveal>
+        <a class="btn btn--light" href={site.booking} target="_blank" rel="noopener" data-magnetic>
+          Book on Booksy <Icon name="arrow" class="btn__icon" size={16} />
+        </a>
+        <a class="btn btn--ghost-light" href={site.phoneHref}>
+          <Icon name="phone" size={16} />
+          {site.phone}
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <Image src={logo} alt={`${site.name} logo`} width={132} class="footer-brand__logo" />
+        <p>Results-driven skin, aesthetics and nail care across North Wales &amp; Liverpool.</p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h3 class="footer-title">Explore</h3>
+        <ul role="list">
+          {
+            nav.map((n) => (
+              <li>
+                <a href={n.href}>{n.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <h3 class="footer-title">Get in touch</h3>
+        <ul role="list">
+          <li><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{site.area}</li>
+          <li>Mobile service +£{site.mobileSurcharge}</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="footer-title">Follow</h3>
+        <ul role="list" class="footer-social">
+          {
+            site.socials.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener">
+                  <Icon name={s.icon} size={18} />
+                  <span>{s.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer-word" aria-hidden="true">Glow <em>with</em> Chlo</p>
+
+    <div class="footer-bottom">
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <p>Fully licensed &amp; insured · {site.yearsExperience} years’ experience</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    overflow: hidden;
+    padding-top: var(--section-y);
+    background: var(--ink);
+    color: var(--on-dark);
+  }
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    inset: -30% -10% auto;
+    height: 80%;
+    background: radial-gradient(50% 50% at 50% 50%, rgb(232 185 170 / 0.16), transparent 70%);
+    pointer-events: none;
+  }
+  .site-footer .eyebrow {
+    color: var(--petal);
+  }
+
+  .footer-cta {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    padding-bottom: var(--section-y);
+    border-bottom: 1px solid rgb(247 237 230 / 0.12);
+  }
+  .footer-cta__title {
+    font-size: var(--step-5);
+    max-width: 14ch;
+  }
+  .footer-cta__title :global(em) {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--petal);
+  }
+  .footer-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: 2.5rem;
+    padding-block: 4rem;
+  }
+  .footer-brand {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    max-width: 30ch;
+    color: var(--on-dark-soft);
+  }
+  .footer-brand__logo {
+    width: 116px;
+    height: auto;
+    filter: invert(1);
+    mix-blend-mode: screen;
+    opacity: 0.9;
+  }
+  .footer-title {
+    margin-bottom: 1.1rem;
+    font-family: var(--font-sans);
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--petal);
+  }
+  .site-footer ul {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0;
+    margin: 0;
+    color: var(--on-dark-soft);
+    font-size: var(--step--1);
+  }
+  .site-footer ul a {
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .site-footer ul a:hover {
+    color: var(--on-dark);
+    text-decoration: underline;
+  }
+  .footer-social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .footer-word {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 15.5vw, 15rem);
+    line-height: 0.85;
+    letter-spacing: -0.045em;
+    text-align: center;
+    white-space: nowrap;
+    background: var(--sheen);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.9;
+    user-select: none;
+  }
+  .footer-word em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 1.75rem 2rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid rgb(247 237 230 / 0.12);
+    font-size: var(--step--2);
+    letter-spacing: 0.06em;
+    color: rgb(247 237 230 / 0.55);
+  }
+
+  @media (max-width: 900px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 520px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

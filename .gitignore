@@ -1,0 +1,20 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# secrets — never commit API keys
+.env
+.env.*
+!.env.example
+
+# local test artefacts
+.shots/
+.chrome-test/
+
+# logs & OS
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,136 @@
+---
+import { Picture } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PriceList from '../components/PriceList.astro';
+import Icon from '../components/Icon.astro';
+import { img } from '../lib/images';
+import { site } from '../data/site';
+import { facials, skinBoosters, nails, nailAddOns } from '../data/services';
+
+const groups = [
+  { id: 'facials', title: 'Facials', note: 'Deluxe facials add exfoliation, a mask and a scalp massage.', items: [...facials].sort((a, b) => a.price - b.price) },
+  { id: 'skin-boosters', title: 'Skin boosters', note: 'Consultation required for all injectables.', items: skinBoosters },
+  { id: 'nails', title: 'Nails', note: 'Nail care is recommended between sets.', items: nails },
+  { id: 'add-ons', title: 'Nail add-ons', note: 'Add to any set.', items: nailAddOns },
+];
+---
+
+<Layout
+  title="Price List"
+  description="The full Glow With Chlo price list — facials from £20, skin boosters, Profhilo and nails. Mobile appointments +£5."
+>
+  <PageHero
+    eyebrow="Price list"
+    title="The Glow <em>menu</em>"
+    lead={`Every treatment, every price — no surprises. Mobile appointments are available for an extra £${site.mobileSurcharge}.`}
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Price list' }]}
+  >
+    <Fragment slot="actions">
+      <a class="btn" href={site.booking} target="_blank" rel="noopener" data-magnetic>
+        Book on Booksy <Icon name="arrow" class="btn__icon" size={16} />
+      </a>
+    </Fragment>
+    <nav class="jump" aria-label="Jump to section" data-reveal>
+      {groups.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
+    </nav>
+  </PageHero>
+
+  <section class="section prices" aria-label="Prices">
+    <div class="container prices__grid">
+      {
+        groups.map((g) => (
+          <section class="price-group" id={g.id} aria-labelledby={`${g.id}-title`}>
+            <div class="price-group__head">
+              <h2 id={`${g.id}-title`} class="h3" data-split>
+                {g.title}
+              </h2>
+              <p class="muted" data-reveal>
+                {g.note}
+              </p>
+            </div>
+            <PriceList items={g.items} />
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--deep" aria-labelledby="printed-title">
+    <div class="container">
+      <SectionHeading id="printed-title" eyebrow="Prefer paper?" title="Our printed <em>menus</em>" align="center" />
+      <div class="printed" data-reveal-stagger>
+        <figure>
+          <Picture src={img('menus/facial-menu.jpg')} alt="Glow Facial & Aesthetics printed menu" formats={['avif', 'webp']} widths={[360, 640]} sizes="(max-width: 700px) 90vw, 40vw" />
+        </figure>
+        <figure>
+          <Picture src={img('menus/nail-menu.jpg')} alt="Glow Nail printed menu" formats={['avif', 'webp']} widths={[360, 640]} sizes="(max-width: 700px) 90vw, 40vw" />
+        </figure>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .jump a {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-pill);
+    font-size: var(--step--1);
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+  .jump a:hover {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .prices {
+    padding-top: 0;
+  }
+  .prices__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 6rem);
+  }
+  .price-group {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+  .price-group__head {
+    display: grid;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--ink);
+  }
+  .printed {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    max-width: 960px;
+    margin: clamp(2rem, 5vw, 3.5rem) auto 0;
+  }
+  .printed figure {
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-md);
+  }
+  @media (max-width: 820px) {
+    .prices__grid,
+    .printed {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

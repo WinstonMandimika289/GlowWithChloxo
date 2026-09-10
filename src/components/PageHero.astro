@@ -1,0 +1,181 @@
+---
+import { Picture } from 'astro:assets';
+import Sprig from './Sprig.astro';
+import { img } from '../lib/images';
+
+interface Props {
+  eyebrow: string;
+  /** May contain <em>. */
+  title: string;
+  lead?: string;
+  image?: string;
+  imageAlt?: string;
+  crumbs?: { label: string; href?: string }[];
+}
+const { eyebrow, title, lead, image, imageAlt = '', crumbs } = Astro.props;
+---
+
+<section class:list={['page-hero', { 'page-hero--text': !image }]}>
+  <div class="container page-hero__grid">
+    <div class="page-hero__text">
+      {
+        crumbs && (
+          <nav aria-label="Breadcrumb" class="crumbs" data-reveal>
+            <ol role="list">
+              {crumbs.map((c) => (
+                <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      <p class="eyebrow" data-reveal>{eyebrow}</p>
+      <h1 class="h1" data-split set:html={title} />
+      {lead && <p class="lead" data-reveal>{lead}</p>}
+      <div class="page-hero__actions" data-reveal>
+        <slot name="actions" />
+      </div>
+      <slot />
+    </div>
+    {
+      image && (
+        <div class="page-hero__media">
+          <div class="page-hero__frame" data-clip>
+            <div class="page-hero__parallax" data-parallax="-8">
+              <Picture
+                src={img(image)}
+                alt={imageAlt}
+                formats={['avif', 'webp']}
+                widths={[480, 760, 1040]}
+                sizes="(max-width: 900px) 90vw, 42vw"
+                priority
+              />
+            </div>
+          </div>
+          <Sprig class="page-hero__sprig" />
+          <span class="page-hero__orb" aria-hidden="true" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    padding-top: calc(var(--header-h) + clamp(2.5rem, 6vw, 5rem));
+    padding-bottom: clamp(3rem, 7vw, 6rem);
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto auto;
+    width: 70%;
+    height: 90%;
+    background: radial-gradient(50% 50% at 70% 30%, rgb(235 207 195 / 0.7), transparent 70%);
+    pointer-events: none;
+  }
+  .page-hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .page-hero--text .page-hero__grid {
+    grid-template-columns: 1fr;
+  }
+  .page-hero__text {
+    display: grid;
+    gap: 1.4rem;
+    justify-items: start;
+  }
+  .page-hero__text :global(.h1) {
+    max-width: 14ch;
+  }
+  .page-hero__actions:empty {
+    display: none;
+  }
+  .page-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    font-size: var(--step--2);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+  }
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    opacity: 0.6;
+  }
+  .crumbs a {
+    text-decoration: none;
+  }
+  .crumbs a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .page-hero__media {
+    position: relative;
+    justify-self: end;
+    width: min(100%, 460px);
+  }
+  .page-hero__frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--r-arch);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: var(--blush);
+  }
+  .page-hero__parallax {
+    position: absolute;
+    inset: -8% 0;
+  }
+  .page-hero__parallax :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .page-hero__media :global(.page-hero__sprig) {
+    position: absolute;
+    left: -18%;
+    bottom: -6%;
+    width: 34%;
+    z-index: 1;
+  }
+  .page-hero__orb {
+    position: absolute;
+    right: -6%;
+    top: 8%;
+    width: 22%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--sheen);
+    opacity: 0.85;
+    filter: blur(0.5px);
+    box-shadow: var(--shadow-md);
+  }
+
+  @media (max-width: 900px) {
+    .page-hero__grid {
+      grid-template-columns: 1fr;
+    }
+    .page-hero__media {
+      justify-self: center;
+      width: min(100%, 380px);
+    }
+  }
+</style>

@@ -1,0 +1,196 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import Sprig from './Sprig.astro';
+import { formatPrice, serviceHref, type Service } from '../data/services';
+import { img } from '../lib/images';
+
+interface Props {
+  service: Service;
+  headingLevel?: 'h2' | 'h3';
+}
+const { service: s, headingLevel: H = 'h3' } = Astro.props;
+---
+
+<article class="service-card" data-tags={s.tags.join(' ')} data-tilt>
+  <div class="service-card__media">
+    {
+      s.image ? (
+        <Picture
+          src={img(s.image)}
+          alt={s.imageAlt ?? ''}
+          formats={['avif', 'webp']}
+          widths={[380, 560, 760]}
+          sizes="(max-width: 680px) 92vw, (max-width: 1100px) 46vw, 30vw"
+          class="service-card__img"
+        />
+      ) : (
+        <div class="service-card__placeholder">
+          <Sprig />
+        </div>
+      )
+    }
+    <span class="service-card__sheen" aria-hidden="true"></span>
+    {
+      s.duration && (
+        <span class="service-card__time">
+          <Icon name="clock" size={14} />
+          {s.duration}
+        </span>
+      )
+    }
+    {s.signature && <span class="service-card__badge">Signature</span>}
+  </div>
+  <div class="service-card__body">
+    <H class="service-card__title">
+      <a href={serviceHref(s)} class="service-card__link">{s.name}</a>
+    </H>
+    <p class="service-card__summary">{s.summary}</p>
+    <div class="service-card__foot">
+      <span class="price service-card__price">{formatPrice(s.price)}</span>
+      <span class="service-card__cta" aria-hidden="true">
+        Discover <Icon name="arrow" size={16} />
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+  .service-card__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--r-arch);
+    overflow: hidden;
+    background: var(--blush);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.6s var(--ease-out);
+  }
+  .service-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition: transform 1.2s var(--ease-out);
+  }
+  .service-card__placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 18%;
+    background: linear-gradient(160deg, var(--blush), var(--cream-deep));
+  }
+  .service-card__sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.28) 48%, transparent 62%);
+    transform: translateX(-120%);
+    transition: transform 1.1s var(--ease-out);
+    pointer-events: none;
+  }
+  .service-card:hover .service-card__media {
+    box-shadow: var(--shadow-lg);
+  }
+  .service-card:hover .service-card__media :global(img) {
+    transform: scale(1.08);
+  }
+  .service-card:hover .service-card__sheen {
+    transform: translateX(120%);
+  }
+  .service-card__time,
+  .service-card__badge {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--r-pill);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .service-card__time {
+    left: 1rem;
+    bottom: 1rem;
+    background: rgb(255 253 251 / 0.85);
+    color: var(--ink);
+  }
+  .service-card__badge {
+    right: 1rem;
+    top: 1rem;
+    background: var(--ink);
+    color: var(--blush);
+  }
+
+  .service-card__body {
+    display: grid;
+    gap: 0.7rem;
+    flex: 1;
+    align-content: start;
+  }
+  .service-card__title {
+    font-size: var(--step-2);
+    line-height: 1.1;
+  }
+  .service-card__link {
+    text-decoration: none;
+  }
+  /* whole card is clickable */
+  .service-card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: var(--r-md);
+  }
+  .service-card__link:focus-visible {
+    outline: none;
+  }
+  .service-card:has(.service-card__link:focus-visible) {
+    outline: 2px solid var(--rose-gold-text);
+    outline-offset: 6px;
+    border-radius: var(--r-md);
+  }
+  .service-card__summary {
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    max-width: 34ch;
+  }
+  .service-card__foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+  .service-card__price {
+    font-size: var(--step-3);
+    line-height: 1;
+  }
+  .service-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--rose-gold-text);
+    transition: gap 0.4s var(--ease-out);
+  }
+  .service-card:hover .service-card__cta {
+    gap: 0.75rem;
+  }
+</style>

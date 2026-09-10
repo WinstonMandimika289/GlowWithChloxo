@@ -1,0 +1,612 @@
+---
+import { Picture } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import Icon from '../../components/Icon.astro';
+import Sprig from '../../components/Sprig.astro';
+import { img } from '../../lib/images';
+import { site, journey } from '../../data/site';
+import {
+  detailServices,
+  relatedServices,
+  categoryLabels,
+  formatPrice,
+  type Service,
+} from '../../data/services';
+
+export function getStaticPaths() {
+  return detailServices.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+interface Props {
+  service: Service;
+}
+const { service: s } = Astro.props;
+const related = relatedServices(s, 3);
+const categoryHref = s.category === 'facials' ? '/treatments' : '/skin-boosters';
+const steps = s.included ?? s.process ?? [];
+const stepsTitle = s.included ? 'What’s <em>included</em>' : 'How it <em>works</em>';
+const url = new URL(`/treatments/${s.slug}`, site.url).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.name,
+    description: s.summary,
+    areaServed: site.area,
+    provider: { '@type': 'BeautySalon', name: site.name, url: site.url, telephone: '+447376228588' },
+    offers: { '@type': 'Offer', price: s.price, priceCurrency: 'GBP', url },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: categoryLabels[s.category], item: new URL(categoryHref, site.url).href },
+      { '@type': 'ListItem', position: 3, name: s.name, item: url },
+    ],
+  },
+];
+---
+
+<Layout
+  title={`${s.name} — ${formatPrice(s.price)}`}
+  description={`${s.name}${s.duration ? ` (${s.duration})` : ''} for ${formatPrice(s.price)} in North Wales & Liverpool. ${s.summary}`}
+  image={s.image}
+  jsonLd={jsonLd}
+>
+  <!-- ============================================================ HERO -->
+  <section class="t-hero">
+    <div class="container t-hero__grid">
+      <div class="t-hero__media">
+        <div class="t-hero__frame" data-clip>
+          <div class="t-hero__parallax" data-parallax="-7">
+            {
+              s.image && (
+                <Picture
+                  src={img(s.image)}
+                  alt={s.imageAlt ?? ''}
+                  formats={['avif', 'webp']}
+                  widths={[460, 760, 1040]}
+                  sizes="(max-width: 900px) 88vw, 40vw"
+                  priority
+                />
+              )
+            }
+          </div>
+        </div>
+        <Sprig class="t-hero__sprig" />
+      </div>
+
+      <div class="t-hero__body">
+        <nav aria-label="Breadcrumb" class="crumbs" data-reveal>
+          <ol role="list">
+            <li><a href="/">Home</a></li>
+            <li><a href={categoryHref}>{categoryLabels[s.category]}</a></li>
+            <li><span aria-current="page">{s.name}</span></li>
+          </ol>
+        </nav>
+        <p class="eyebrow" data-reveal>{s.tagline ?? categoryLabels[s.category]}</p>
+        <h1 class="h1 t-hero__title" data-split>{s.name}</h1>
+        <p class="lead" data-reveal>{s.summary}</p>
+
+        <dl class="t-hero__meta" data-reveal>
+          <div>
+            <dt>Price</dt>
+            <dd class="price">{formatPrice(s.price)}</dd>
+          </div>
+          {
+            s.duration && (
+              <div>
+                <dt>Duration</dt>
+                <dd class="price">{s.duration}</dd>
+              </div>
+            )
+          }
+          <div>
+            <dt>Mobile</dt>
+            <dd class="price">+£{site.mobileSurcharge}</dd>
+          </div>
+        </dl>
+
+        {
+          s.highlights && (
+            <ul class="t-hero__highlights" role="list" data-reveal>
+              {s.highlights.map((h) => (
+                <li class="chip">
+                  <Icon name="sparkle" size={14} /> {h}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
+        <div class="t-hero__actions" data-reveal>
+          <a class="btn" href={site.booking} target="_blank" rel="noopener" data-magnetic>
+            Book {s.name} <Icon name="arrow" class="btn__icon" size={16} />
+          </a>
+          <button type="button" class="btn btn--ghost" data-chat-open data-chat-ask={`Tell me more about ${s.name}`}>
+            <Icon name="chat" size={18} /> Ask a question
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ INTRO -->
+  {
+    s.intro && (
+      <section class="section t-intro" aria-label="About this treatment">
+        <div class="container--narrow t-intro__inner">
+          <p class="t-intro__lead" data-scrub-text>
+            {s.intro[0]}
+          </p>
+          {s.intro.slice(1).map((p) => (
+            <p class="t-intro__p" data-reveal>
+              {p}
+            </p>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============================================================ STEPS -->
+  {
+    steps.length > 0 && (
+      <section class="section section--blush t-steps" aria-labelledby="steps-title">
+        <div class="container t-steps__grid">
+          <div class="t-steps__head">
+            <SectionHeading
+              id="steps-title"
+              eyebrow={s.included ? 'The treatment' : 'The process'}
+              title={stepsTitle}
+              lead={
+                s.category === 'skin-boosters'
+                  ? 'Every injectable treatment begins with a consultation to make sure it’s right and safe for you.'
+                  : 'A calm, unhurried ritual — here’s exactly what happens during your appointment.'
+              }
+            />
+          </div>
+          <ol class="timeline" role="list">
+            <span class="timeline__line" aria-hidden="true">
+              <span data-draw />
+            </span>
+            {steps.map((step, i) => (
+              <li class="timeline__item" data-reveal>
+                <span class="timeline__num">0{i + 1}</span>
+                <div>
+                  <h3 class="timeline__title">{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============================================================ BENEFITS -->
+  {
+    s.benefits && (
+      <section class="section t-benefits" aria-labelledby="benefits-title">
+        <div class="container">
+          <SectionHeading id="benefits-title" eyebrow="Why you’ll love it" title="The <em>benefits</em>" align="center" />
+          <ul class="benefits" role="list" data-reveal-stagger>
+            {s.benefits.map((b) => (
+              <li class="benefit">
+                <span class="benefit__icon">
+                  <Icon name="check" size={18} />
+                </span>
+                <p>
+                  <strong>{b.title}</strong> {b.text}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============================================================ RESULTS -->
+  {
+    s.results && (
+      <section class="section section--deep t-results" aria-labelledby="results-title">
+        <div class="container t-results__grid">
+          <figure class="t-results__figure" data-clip>
+            <Picture
+              src={img(s.results)}
+              alt={s.resultsAlt ?? ''}
+              formats={['avif', 'webp']}
+              widths={[420, 720, 960]}
+              sizes="(max-width: 900px) 90vw, 45vw"
+            />
+          </figure>
+          <div class="t-results__body">
+            <SectionHeading
+              id="results-title"
+              eyebrow="Real results"
+              title="Before &amp; <em>after</em>"
+              lead="A real Glow With Chlo client, photographed before and after treatment."
+            />
+            <p class="t-results__note" data-reveal>
+              Individual results vary. Follow-up appointments help maintain long-term results.
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============================================================ JOURNEY -->
+  <section class="section t-journey" aria-labelledby="journey-title">
+    <div class="container">
+      <SectionHeading id="journey-title" eyebrow="Your visit" title="From consultation to <em>glow</em>" align="center" />
+      <ol class="journey-mini" role="list" data-reveal-stagger>
+        {
+          journey.map((j, i) => (
+            <li>
+              <span class="journey-mini__num">0{i + 1}</span>
+              <h3>{j.title}</h3>
+              <p>{j.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================================================ RELATED -->
+  <section class="section section--blush t-related" aria-labelledby="related-title">
+    <div class="container">
+      <div class="t-related__head">
+        <SectionHeading id="related-title" eyebrow="Keep exploring" title="You may also <em>love</em>" />
+        <a class="link-arrow" href={categoryHref} data-reveal>All {categoryLabels[s.category].toLowerCase()} <Icon name="arrow-right" size={16} /></a>
+      </div>
+      <ul class="cards-grid" role="list" data-reveal-stagger>
+        {
+          related.map((r) => (
+            <li>
+              <ServiceCard service={r} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .t-hero {
+    position: relative;
+    padding-top: calc(var(--header-h) + clamp(2rem, 5vw, 4rem));
+    padding-bottom: clamp(3rem, 7vw, 6rem);
+    overflow: hidden;
+  }
+  .t-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 60%;
+    height: 90%;
+    background: radial-gradient(50% 50% at 35% 40%, rgb(235 207 195 / 0.75), transparent 70%);
+    pointer-events: none;
+  }
+  .t-hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .t-hero__media {
+    position: relative;
+    width: min(100%, 500px);
+  }
+  .t-hero__frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--r-arch);
+    background: var(--blush);
+    box-shadow: var(--shadow-lg);
+  }
+  .t-hero__parallax {
+    position: absolute;
+    inset: -8% 0;
+  }
+  .t-hero__parallax :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .t-hero__media :global(.t-hero__sprig) {
+    position: absolute;
+    right: -14%;
+    bottom: -4%;
+    width: 30%;
+  }
+  .t-hero__body {
+    display: grid;
+    gap: 1.35rem;
+    justify-items: start;
+  }
+  .t-hero__title {
+    max-width: 16ch;
+  }
+  .t-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 0.4rem 0 0;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-md);
+    background: rgb(255 253 251 / 0.6);
+  }
+  .t-hero__meta > div {
+    padding: 0.9rem 1.4rem;
+  }
+  .t-hero__meta > div + div {
+    border-left: 1px solid var(--line);
+  }
+  .t-hero__meta dt {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose-gold-text);
+  }
+  .t-hero__meta dd {
+    margin: 0;
+    font-size: var(--step-2);
+    line-height: 1.2;
+  }
+  .t-hero__highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+  }
+  .t-hero__highlights :global(svg) {
+    color: var(--rose-gold);
+  }
+  .t-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 0.4rem;
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    font-size: var(--step--2);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+  }
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    opacity: 0.6;
+  }
+  .crumbs a {
+    text-decoration: none;
+  }
+  .crumbs a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .t-intro__inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .t-intro__lead {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    text-wrap: pretty;
+  }
+  .t-intro__p {
+    max-width: 60ch;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .t-steps__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .t-steps__head {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    padding: 0 0 0 0;
+    margin: 0;
+  }
+  .timeline__line {
+    position: absolute;
+    left: 27px;
+    top: 28px;
+    bottom: 28px;
+    width: 1px;
+    background: var(--line-strong);
+  }
+  .timeline__line span {
+    position: absolute;
+    inset: 0;
+    background: var(--rose-gold);
+    transform-origin: top;
+  }
+  .timeline__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+    padding: 0.9rem 0;
+  }
+  .timeline__num {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--rose-gold);
+    border-radius: 50%;
+    background: var(--blush);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--rose-gold-text);
+  }
+  .timeline__title {
+    margin: 0.35rem 0 0.35rem;
+    font-size: var(--step-2);
+  }
+  .timeline__item p {
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+
+  .benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 1rem;
+    padding: 0;
+    margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+  }
+  .benefit {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--paper);
+    transition:
+      transform 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out),
+      border-color 0.4s;
+  }
+  .benefit:hover {
+    transform: translateY(-4px);
+    border-color: var(--petal);
+    box-shadow: var(--shadow-md);
+  }
+  .benefit__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--blush);
+    color: var(--rose-gold-text);
+  }
+  .benefit strong {
+    font-weight: 700;
+  }
+
+  .t-results__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .t-results__figure {
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+  }
+  .t-results__figure :global(img) {
+    width: 100%;
+  }
+  .t-results__body {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .t-results__note {
+    font-size: var(--step--1);
+    color: var(--ink-mute);
+  }
+
+  .journey-mini {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0;
+    margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+  }
+  .journey-mini li {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: 1.6rem 1.4rem;
+    border-top: 1px solid var(--rose-gold);
+  }
+  .journey-mini__num {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-style: italic;
+    color: var(--rose-gold);
+  }
+  .journey-mini h3 {
+    font-size: var(--step-1);
+  }
+  .journey-mini p {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .t-related__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  @media (max-width: 900px) {
+    .t-hero__grid,
+    .t-steps__grid,
+    .t-results__grid {
+      grid-template-columns: 1fr;
+    }
+    .t-hero__media {
+      justify-self: center;
+      width: min(100%, 380px);
+    }
+    .t-steps__head {
+      position: static;
+    }
+    .journey-mini {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .journey-mini {
+      grid-template-columns: 1fr;
+    }
+    .t-hero__meta > div {
+      padding: 0.8rem 1rem;
+    }
+  }
+</style>

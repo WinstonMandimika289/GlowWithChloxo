@@ -1,0 +1,102 @@
+---
+interface Props {
+  items: readonly { q: string; a: string }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="faq" data-reveal-stagger>
+  {
+    items.map((f, i) => (
+      <details class="faq__item" name="faq" open={i === 0}>
+        <summary class="faq__q">
+          <span>{f.q}</span>
+          <span class="faq__icon" aria-hidden="true" />
+        </summary>
+        <div class="faq__a">
+          <p>{f.a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    border-top: 1px solid var(--line-strong);
+    interpolate-size: allow-keywords;
+  }
+  .faq__item {
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.25;
+    transition: color 0.3s;
+  }
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+  .faq__q:hover {
+    color: var(--rose-gold-text);
+  }
+  .faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    transition:
+      background 0.4s var(--ease-out),
+      border-color 0.4s,
+      transform 0.5s var(--ease-out);
+  }
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 1.5px;
+    background: currentColor;
+    translate: -50% -50%;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .faq__icon::after {
+    transform: rotate(90deg);
+  }
+  .faq__item[open] .faq__icon {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--cream);
+    transform: rotate(180deg);
+  }
+  .faq__item[open] .faq__icon::after {
+    transform: rotate(0deg);
+  }
+  .faq__a {
+    padding: 0 3.5rem 1.6rem 0;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+  .faq__item::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.55s var(--ease-out),
+      content-visibility 0.55s allow-discrete;
+  }
+  .faq__item[open]::details-content {
+    block-size: auto;
+  }
+</style>

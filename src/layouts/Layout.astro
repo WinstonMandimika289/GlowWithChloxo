@@ -1,0 +1,120 @@
+---
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource-variable/manrope/wght.css';
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { getImage } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Preloader from '../components/Preloader.astro';
+import ChatWidget from '../components/ChatWidget.astro';
+import { site } from '../data/site';
+import { services } from '../data/services';
+import { img } from '../lib/images';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** OG image path relative to src/assets */
+  image?: string;
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = site.description,
+  image = 'photos/facial-glow-relaxed.jpg',
+  jsonLd = [],
+} = Astro.props;
+
+const fullTitle = title
+  ? `${title} · ${site.name}`
+  : `${site.name} — Facials, Skin Boosters & Nails in North Wales & Liverpool`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = await getImage({ src: img(image), width: 1200, height: 630, format: 'jpg', fit: 'cover' });
+const ogUrl = new URL(og.src, Astro.site).href;
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'BeautySalon',
+  name: site.name,
+  url: site.url,
+  image: ogUrl,
+  telephone: '+447376228588',
+  email: site.email,
+  areaServed: ['North Wales', 'Liverpool'],
+  sameAs: site.socials.map((s) => s.href),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Treatments',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      price: s.price,
+      priceCurrency: 'GBP',
+      itemOffered: { '@type': 'Service', name: s.name, description: s.summary },
+    })),
+  },
+};
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#fbf6f1" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Motion gate: only hide-then-reveal content when the visitor allows motion.
+         ClientRouter resets <html> attributes on navigation, so re-apply after swaps. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        function apply() {
+          d.classList.add('js');
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+        }
+        apply();
+        try {
+          if (!sessionStorage.getItem('gwc-visited')) {
+            d.classList.add('first-visit');
+            sessionStorage.setItem('gwc-visited', '1');
+          }
+        } catch (e) {}
+        document.addEventListener('astro:after-swap', apply);
+        // Failsafe: never leave content hidden if the motion script fails to load.
+        setTimeout(function () {
+          if (!window.__gwcMotion) d.classList.remove('motion', 'first-visit');
+        }, 4000);
+      })();
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify([business, ...jsonLd])} />
+    <ClientRouter />
+  </head>
+  <body class="grain">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Preloader />
+    <Header />
+    <main id="main" transition:name="main">
+      <slot />
+    </main>
+    <Footer />
+    <ChatWidget />
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

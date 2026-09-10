@@ -1,0 +1,89 @@
+---
+import { formatPrice, serviceHref, type Service } from '../data/services';
+
+interface Props {
+  items: Service[];
+  summaries?: boolean;
+}
+const { items, summaries = false } = Astro.props;
+---
+
+<ul class="price-list" role="list" data-reveal-stagger>
+  {
+    items.map((s) => (
+      <li class="price-row">
+        <span class="price-row__name">
+          {s.detailPage ? <a href={serviceHref(s)}>{s.name}</a> : s.name}
+          {(s.duration || s.note) && (
+            <span class="price-row__meta">{[s.duration, s.note].filter(Boolean).join(' · ')}</span>
+          )}
+        </span>
+        <span class="price-row__leader" aria-hidden="true" />
+        <span class="price price-row__price">{formatPrice(s.price)}</span>
+        {summaries && <p class="price-row__summary">{s.summary}</p>}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .price-list {
+    display: grid;
+    padding: 0;
+    margin: 0;
+  }
+  .price-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'name leader price'
+      'summary summary summary';
+    align-items: baseline;
+    column-gap: 1rem;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .price-row__name {
+    grid-area: name;
+    display: grid;
+    gap: 0.15rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.2;
+  }
+  .price-row__name a {
+    text-decoration: none;
+    background: linear-gradient(currentColor 0 0) left bottom / 0% 1px no-repeat;
+    transition: background-size 0.45s var(--ease-out);
+  }
+  .price-row__name a:hover {
+    background-size: 100% 1px;
+  }
+  .price-row__meta {
+    font-family: var(--font-sans);
+    font-size: var(--step--2);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .price-row__leader {
+    grid-area: leader;
+    align-self: center;
+    min-width: 1.5rem;
+    border-bottom: 1px dotted var(--line-strong);
+    transform: translateY(0.35em);
+  }
+  .price-row__price {
+    grid-area: price;
+    font-size: var(--step-2);
+    color: var(--rose-gold-text);
+  }
+  .price-row__summary {
+    grid-area: summary;
+    margin-top: 0.35rem;
+    max-width: 52ch;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+</style>

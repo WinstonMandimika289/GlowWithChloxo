@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Sprig from '../components/Sprig.astro';
+import { nav } from '../data/site';
+---
+
+<Layout title="Page not found" description="This page couldn’t be found.">
+  <section class="nf">
+    <Sprig class="nf__sprig" />
+    <div class="container nf__inner">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="display" data-split>This page lost its <em>glow</em></h1>
+      <p class="lead">The page you’re looking for has moved or no longer exists. Try one of these instead:</p>
+      <ul class="nf__links" role="list">
+        {
+          nav.map((n) => (
+            <li>
+              <a class="btn btn--ghost btn--sm" href={n.href}>
+                {n.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <button type="button" class="link-arrow" data-chat-open>Or ask Glow for help <Icon name="arrow-right" size={16} /></button>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nf {
+    position: relative;
+    display: grid;
+    align-items: center;
+    min-height: 90svh;
+    padding-block: calc(var(--header-h) + 3rem) 4rem;
+    overflow: hidden;
+    text-align: center;
+  }
+  .nf__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+  }
+  .nf .display {
+    max-width: 12ch;
+  }
+  .nf__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+  }
+  .nf :global(.nf__sprig) {
+    position: absolute;
+    right: 6%;
+    top: 18%;
+    width: clamp(80px, 12vw, 160px);
+    opacity: 0.5;
+  }
+  .link-arrow {
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+  }
+</style>

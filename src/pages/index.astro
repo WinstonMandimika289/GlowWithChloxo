@@ -1,0 +1,1135 @@
+---
+import { Picture } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Marquee from '../components/Marquee.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ReviewCarousel from '../components/ReviewCarousel.astro';
+import Faq from '../components/Faq.astro';
+import ContactSection from '../components/ContactSection.astro';
+import Icon from '../components/Icon.astro';
+import Sprig from '../components/Sprig.astro';
+import { img } from '../lib/images';
+import { site, credentials, journey, faqs } from '../data/site';
+import { signature, facials, skinBoosters, nails, formatPrice, serviceHref, type Service } from '../data/services';
+
+const from = (list: Service[]) => Math.min(...list.map((s) => s.price));
+const categories = [
+  {
+    title: 'Facials',
+    href: '/treatments',
+    from: from(facials),
+    image: 'photos/facial-glow-relaxed.jpg',
+    alt: 'Client relaxing with glowing skin during a facial',
+    text: 'Dermaplaning, mesotherapy and combination facials for smooth, hydrated, glowing skin.',
+  },
+  {
+    title: 'Skin Boosters',
+    href: '/skin-boosters',
+    from: from(skinBoosters),
+    image: 'photos/mesotherapy-procedure.jpg',
+    alt: 'Skin booster serum being delivered to the skin',
+    text: 'Profhilo and injectable boosters for deep hydration, firmness and a lit-from-within glow.',
+  },
+  {
+    title: 'Nails',
+    href: '/nails',
+    from: from(nails),
+    image: 'nails/nude-floral-french.jpg',
+    alt: 'Soft nude French manicure with floral art and crystals',
+    text: 'Gel, acrylics, manicures and pedicures — finished with nail art, gems and 3D flowers.',
+  },
+];
+
+const gallery = [
+  { src: 'results/deluxe-meso-derma.jpg', alt: 'Before and after a deluxe facial, showing smoother, brighter skin' },
+  { src: 'nails/pink-heart-french.jpg', alt: 'Pink French tip nails with hand-drawn hearts' },
+  { src: 'photos/facial-rosy-deluxe.jpg', alt: 'Client with luminous, rosy skin after a deluxe facial' },
+  { src: 'results/meso-derma.jpg', alt: 'Before and after a Mesotherapy & Dermaplaning facial' },
+  { src: 'nails/green-gold-french.jpg', alt: 'Forest green French manicure with gold accents' },
+  { src: 'results/jawline.jpg', alt: 'Before and after a facial, showing smoother skin along the jaw' },
+  { src: 'nails/mocha-floral-coffin.jpg', alt: 'Mocha coffin nails with hand-painted florals and gold gems' },
+  { src: 'results/deluxe-dermaplaning.jpg', alt: 'Before and after on mature skin, showing a plumper texture' },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout jsonLd={[faqLd]}>
+  <!-- ============================================================ HERO -->
+  <section class="hero" data-hero>
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="container hero__grid">
+      <div class="hero__text">
+        <p class="chip chip--sparkle" data-reveal>North Wales &amp; Liverpool · Mobile service</p>
+        <h1 class="display hero__title" data-split>Radiance, <em>refined.</em></h1>
+        <p class="lead hero__lead" data-reveal>
+          Results-driven facials, skin boosters and nails by Chlo — in a calm, luxurious setting or in the comfort of
+          your own home.
+        </p>
+        <div class="hero__actions" data-reveal>
+          <a class="btn" href={site.booking} target="_blank" rel="noopener" data-magnetic>
+            Book your glow <Icon name="arrow" class="btn__icon" size={16} />
+          </a>
+          <a class="btn btn--ghost" href="/treatments">Explore treatments</a>
+        </div>
+        <ul class="hero__proof" role="list" data-reveal>
+          <li><span class="hero__stars" aria-hidden="true">★★★★★</span> Five-star reviews</li>
+          <li><Icon name="shield" size={18} /> Licensed &amp; insured</li>
+          <li><Icon name="car" size={18} /> Mobile +£{site.mobileSurcharge}</li>
+        </ul>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero__frame hero__frame--back" data-clip>
+          <div data-parallax="7">
+            <Picture src={img('photos/spa-still-life.jpg')} alt="" formats={['avif', 'webp']} widths={[320, 560]} sizes="(max-width: 900px) 34vw, 16vw" />
+          </div>
+        </div>
+        <div class="hero__frame hero__frame--main" data-clip>
+          <div data-parallax="-5">
+            <Picture
+              src={img('photos/facial-glow-relaxed.jpg')}
+              alt="Relaxed client with glowing, hydrated skin during a facial"
+              formats={['avif', 'webp']}
+              widths={[420, 680, 960]}
+              sizes="(max-width: 900px) 62vw, 30vw"
+              priority
+            />
+          </div>
+        </div>
+        <div class="hero__frame hero__frame--small" data-clip>
+          <Picture
+            src={img('photos/facial-rosy-deluxe.jpg')}
+            alt="Client with luminous, rosy skin after a deluxe facial"
+            formats={['avif', 'webp']}
+            widths={[220, 380]}
+            sizes="(max-width: 900px) 30vw, 12vw"
+          />
+        </div>
+        <a class="hero__badge" href={site.booking} target="_blank" rel="noopener" aria-label="Book your glow on Booksy">
+          <svg viewBox="0 0 120 120" class="hero__badge-ring" aria-hidden="true">
+            <defs><path id="badge-circle" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"></path></defs>
+            <text><textPath href="#badge-circle" textLength="280" lengthAdjust="spacing">Book your glow ✦ Book your glow ✦</textPath></text>
+          </svg>
+          <span class="hero__badge-core"><Icon name="arrow" size={22} /></span>
+        </a>
+        <a class="hero__card" href={serviceHref(signature)} data-reveal>
+          <span class="hero__card-label">Signature facial</span>
+          <strong>{signature.name}</strong>
+          <span class="price">{formatPrice(signature.price)} <small>· {signature.duration}</small></span>
+        </a>
+        <Sprig class="hero__sprig" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ MOVING BANNERS -->
+  <div class="bands">
+    <Marquee
+      variant="band"
+      label="Treatments"
+      tilt={-2.2}
+      speed={36}
+      items={['Dermaplaning', 'Mesotherapy', 'Profhilo', 'Skin boosters', 'Luxury mini facials', 'Gel & acrylic nails', 'Mobile service']}
+    />
+    <Marquee
+      variant="band"
+      class="bands__second"
+      reverse
+      tilt={1.8}
+      speed={44}
+      items={['Book on Booksy', 'Fully licensed', 'Fully insured', `${site.yearsExperience} years’ experience`, `Mobile +£${site.mobileSurcharge}`, 'North Wales & Liverpool']}
+    />
+  </div>
+
+  <!-- ============================================================ STATEMENT -->
+  <section class="section statement">
+    <div class="container statement__inner">
+      <p class="eyebrow" data-reveal>The Glow philosophy</p>
+      <p class="statement__text" data-scrub-text>
+        Every treatment begins with you — your skin, your goals, your glow. Thoughtful consultations, visible results
+        and a genuinely relaxing hour that’s all yours.
+      </p>
+      <ul class="stats" role="list" data-reveal-stagger>
+        {
+          credentials.map((c) => (
+            <li class="stat">
+              <span class="stat__num" data-count={c.value} data-suffix={c.suffix}>
+                {c.value}
+                {c.suffix}
+              </span>
+              <span class="stat__label">{c.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ SIGNATURE -->
+  <section class="section section--blush signature" aria-labelledby="signature-title">
+    <div class="container signature__grid">
+      <div class="signature__media">
+        <div class="signature__main" data-clip>
+          <div data-parallax="-6">
+            <Picture
+              src={img(signature.image!)}
+              alt={signature.imageAlt ?? ''}
+              formats={['avif', 'webp']}
+              widths={[480, 800, 1100]}
+              sizes="(max-width: 900px) 80vw, 40vw"
+            />
+          </div>
+        </div>
+        {
+          signature.results && (
+            <figure class="signature__results" data-reveal>
+              <Picture
+                src={img(signature.results)}
+                alt={signature.resultsAlt ?? ''}
+                formats={['avif', 'webp']}
+                widths={[260, 420]}
+                sizes="(max-width: 900px) 40vw, 17vw"
+              />
+              <figcaption>Real results</figcaption>
+            </figure>
+          )
+        }
+      </div>
+
+      <div class="signature__body">
+        <SectionHeading id="signature-title" eyebrow="Signature treatment" title="The Ultimate <em>Glow</em>">
+          <p class="signature__name" data-reveal>{signature.name}</p>
+        </SectionHeading>
+        <p class="muted" data-reveal>{signature.intro?.[0]}</p>
+        <div class="signature__meta" data-reveal>
+          <span class="price signature__price">{formatPrice(signature.price)}</span>
+          <span class="chip"><Icon name="clock" size={14} /> {signature.duration}</span>
+        </div>
+        <ol class="steps" role="list" data-reveal-stagger>
+          {
+            signature.included?.map((step) => (
+              <li>
+                <div>
+                  <strong>{step.title}</strong>
+                  <span>{step.text}</span>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="signature__actions" data-reveal>
+          <a class="btn" href={site.booking} target="_blank" rel="noopener" data-magnetic>
+            Book this facial <Icon name="arrow" class="btn__icon" size={16} />
+          </a>
+          <a class="link-arrow" href={serviceHref(signature)}>View details <Icon name="arrow-right" size={16} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CATEGORIES -->
+  <section class="section categories" aria-labelledby="menu-title">
+    <div class="container">
+      <div class="categories__head">
+        <SectionHeading
+          id="menu-title"
+          eyebrow="The menu"
+          title="Treatments, <em>tailored</em> to you"
+          lead="Three ways to glow — each one starting with a consultation, so your treatment is right for your skin."
+        />
+        <a class="link-arrow" href="/prices" data-reveal>Full price list <Icon name="arrow-right" size={16} /></a>
+      </div>
+      <ul class="categories__grid" role="list" data-reveal-stagger>
+        {
+          categories.map((c, i) => (
+            <li>
+              <a class="cat-card" href={c.href} data-tilt>
+                <div class="cat-card__media">
+                  <Picture
+                    src={img(c.image)}
+                    alt={c.alt}
+                    formats={['avif', 'webp']}
+                    widths={[380, 620, 860]}
+                    sizes="(max-width: 900px) 92vw, 31vw"
+                  />
+                </div>
+                <span class="cat-card__arrow" aria-hidden="true">
+                  <Icon name="arrow" size={20} />
+                </span>
+                <div class="cat-card__body">
+                  <span class="cat-card__num">0{i + 1}</span>
+                  <h3>{c.title}</h3>
+                  <p>{c.text}</p>
+                  <span class="cat-card__from">
+                    From <span class="price">£{c.from}</span>
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ JOURNEY (pinned horizontal scroll) -->
+  <section class="journey section--dark" data-hscroll aria-labelledby="journey-title">
+    <div class="journey__viewport">
+      <div class="journey__track" data-hscroll-track>
+        <div class="journey__intro">
+          <p class="eyebrow">Your visit</p>
+          <h2 id="journey-title" class="h2">The Glow <em>ritual</em></h2>
+          <p class="lead">From your first consultation to follow-up, every step is designed around your skin.</p>
+        </div>
+        {
+          journey.map((j, i) => (
+            <article class="journey__step">
+              <span class="journey__num" aria-hidden="true">0{i + 1}</span>
+              <h3 class="h3">{j.title}</h3>
+              <p>{j.text}</p>
+            </article>
+          ))
+        }
+        <div class="journey__end">
+          <a class="btn btn--light" href={site.booking} target="_blank" rel="noopener">
+            Start your ritual <Icon name="arrow" class="btn__icon" size={16} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Marquee variant="outline" items={['Radiance', 'Hydration', 'Confidence', 'Glow']} speed={55} class="outline-band" />
+
+  <!-- ============================================================ RESULTS GALLERY -->
+  <section class="section results" aria-labelledby="results-title">
+    <div class="container">
+      <SectionHeading
+        id="results-title"
+        align="center"
+        eyebrow="Real skin, real results"
+        title="The proof is in the <em>glow</em>"
+        lead="A few recent favourites — from fresh-faced facial finishes to hand-finished nail art."
+      />
+      <ul class="gallery" role="list">
+        {
+          gallery.map((g) => (
+            <li class="gallery__item">
+              <figure data-clip>
+                <Picture
+                  src={img(g.src)}
+                  alt={g.alt}
+                  formats={['avif', 'webp']}
+                  widths={[300, 480, 720]}
+                  sizes="(max-width: 700px) 46vw, 24vw"
+                />
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="results__cta" data-reveal>
+        <a class="btn btn--ghost" href={site.socials[0].href} target="_blank" rel="noopener">
+          <Icon name="instagram" size={18} /> More on Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <ReviewCarousel />
+
+  <!-- ============================================================ REEL -->
+  <section class="section reel" aria-labelledby="reel-title">
+    <div class="container reel__grid">
+      <a class="reel__media" href={site.instagramReel} target="_blank" rel="noopener" data-clip>
+        <Picture
+          src={img('photos/facial-dewy-freckles.jpg')}
+          alt=""
+          formats={['avif', 'webp']}
+          widths={[520, 860, 1200]}
+          sizes="(max-width: 900px) 92vw, 50vw"
+        />
+        <span class="reel__play"><Icon name="play" size={28} /></span>
+        <span class="sr-only">Watch the Glow With Chlo reel on Instagram (opens in a new tab)</span>
+      </a>
+      <div class="reel__body">
+        <SectionHeading
+          id="reel-title"
+          eyebrow="Watch"
+          title="Relax, rejuvenate, <em>revive</em>"
+          lead="Take a peek inside a Glow facial — the calm, the care and that fresh-faced reveal."
+        />
+        <a class="btn" href={site.instagramReel} target="_blank" rel="noopener" data-reveal>
+          <Icon name="instagram" size={18} /> Watch on Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ FAQ -->
+  <section class="section section--deep faq-section" aria-labelledby="faq-title">
+    <div class="container faq-section__grid">
+      <div class="faq-section__head">
+        <SectionHeading
+          id="faq-title"
+          eyebrow="Good to know"
+          title="Questions, <em>answered</em>"
+          lead="Can’t see yours? Ask Glow, our assistant — or get in touch."
+        />
+        <button type="button" class="btn btn--ghost" data-chat-open data-reveal>
+          <Icon name="chat" size={18} /> Ask Glow
+        </button>
+      </div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <ContactSection />
+</Layout>
+
+<style>
+  /* ---------------------------------------------------------------- hero */
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    padding-top: calc(var(--header-h) + clamp(1.5rem, 4vw, 3rem));
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+    overflow: hidden;
+  }
+  .hero__glow {
+    position: absolute;
+    inset: -20% -10% auto auto;
+    width: 78%;
+    height: 115%;
+    background:
+      radial-gradient(45% 45% at 60% 45%, rgb(235 207 195 / 0.9), transparent 70%),
+      radial-gradient(28% 28% at 82% 22%, rgb(243 85 136 / 0.12), transparent 70%);
+    pointer-events: none;
+  }
+  .hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+  .hero__text {
+    display: grid;
+    gap: 1.6rem;
+    justify-items: start;
+  }
+  .hero__title {
+    max-width: 8ch;
+  }
+  .hero__lead {
+    max-width: 36ch;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  .hero__proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.6rem;
+    padding: 0;
+    margin: 0.4rem 0 0;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .hero__proof li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hero__proof :global(svg) {
+    color: var(--rose-gold-text);
+  }
+  .hero__stars {
+    color: var(--rose-gold);
+    letter-spacing: 0.08em;
+  }
+
+  .hero__visual {
+    position: relative;
+    justify-self: end;
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 5 / 6;
+  }
+  .hero__frame {
+    position: absolute;
+    overflow: hidden;
+    background: var(--blush);
+    box-shadow: var(--shadow-lg);
+  }
+  .hero__frame > div {
+    position: absolute;
+    inset: -7% 0;
+  }
+  .hero__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__frame--main {
+    left: 14%;
+    top: 4%;
+    width: 62%;
+    height: 84%;
+    border-radius: var(--r-arch);
+  }
+  .hero__frame--back {
+    right: 0;
+    top: 0;
+    width: 32%;
+    height: 44%;
+    border-radius: var(--r-lg);
+  }
+  .hero__frame--small {
+    left: 0;
+    bottom: 3%;
+    width: 31%;
+    aspect-ratio: 1;
+    border: 6px solid var(--cream);
+    border-radius: 50%;
+  }
+  .hero__badge {
+    position: absolute;
+    right: 5%;
+    bottom: 9%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: clamp(96px, 11vw, 132px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--cream);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+  }
+  .hero__badge-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    animation: spin 18s linear infinite;
+  }
+  .hero__badge-core {
+    display: grid;
+    place-items: center;
+    width: 44%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--petal);
+    color: var(--ink);
+    transition: transform 0.6s var(--ease-out);
+  }
+  .hero__badge:hover .hero__badge-core {
+    transform: rotate(45deg) scale(1.08);
+  }
+  .hero__card {
+    position: absolute;
+    left: 2%;
+    top: 12%;
+    z-index: 2;
+    display: grid;
+    gap: 0.25rem;
+    max-width: 230px;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgb(255 255 255 / 0.6);
+    border-radius: var(--r-md);
+    background: rgb(255 253 251 / 0.82);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .hero__card:hover {
+    transform: translateY(-4px);
+  }
+  .hero__card-label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rose-gold-text);
+  }
+  .hero__card strong {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  .hero__card .price {
+    font-size: 1.55rem;
+  }
+  .hero__card small {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .hero :global(.hero__sprig) {
+    position: absolute;
+    right: -5%;
+    top: 40%;
+    z-index: 1;
+    width: 17%;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (max-width: 900px) {
+    .hero {
+      min-height: auto;
+    }
+    .hero__grid {
+      grid-template-columns: 1fr;
+    }
+    .hero__visual {
+      justify-self: center;
+      max-width: 520px;
+    }
+  }
+  @media (max-width: 520px) {
+    .hero__card {
+      top: auto;
+      bottom: -2%;
+      left: 34%;
+      padding: 0.75rem 0.9rem;
+      max-width: 200px;
+    }
+    .hero__badge {
+      top: 2%;
+      bottom: auto;
+      right: 2%;
+    }
+  }
+
+  /* ---------------------------------------------------------------- bands */
+  .bands {
+    position: relative;
+    display: grid;
+    padding-block: 3.5rem;
+    overflow: hidden;
+  }
+  .bands > :global(.marquee) {
+    grid-area: 1 / 1;
+    width: 112%;
+    margin-left: -6%;
+    z-index: 1;
+  }
+  .bands :global(.marquee.bands__second) {
+    z-index: 0;
+    background: var(--blush-deep);
+    color: var(--ink);
+  }
+  .bands :global(.marquee.bands__second .marquee__sep) {
+    color: var(--rose-gold-text);
+  }
+
+  /* ---------------------------------------------------------------- statement */
+  .statement__inner {
+    display: grid;
+    justify-items: center;
+    gap: 2.5rem;
+    text-align: center;
+  }
+  .statement__text {
+    max-width: 24ch;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-weight: 350;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-variation-settings: 'opsz' 144;
+    text-wrap: balance;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 900px;
+    padding: 0;
+    margin: 1rem 0 0;
+  }
+  .stat {
+    display: grid;
+    justify-items: center;
+    gap: 0.4rem;
+    padding: 1.5rem 1rem 0;
+    border-top: 1px solid var(--line-strong);
+  }
+  .stat__num {
+    font-family: var(--font-display);
+    font-size: var(--step-5);
+    line-height: 1;
+    color: var(--rose-gold);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat__label {
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 600px) {
+    .stats {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------------------------------------------------------- signature */
+  .signature__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .signature__media {
+    position: relative;
+    padding-bottom: 14%;
+  }
+  .signature__main {
+    position: relative;
+    width: 84%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+  }
+  .signature__main > div {
+    position: absolute;
+    inset: -7% 0;
+  }
+  .signature__main :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .signature__results {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 44%;
+    margin: 0;
+    padding: 0.55rem 0.55rem 0;
+    border-radius: var(--r-md);
+    background: var(--paper);
+    box-shadow: var(--shadow-lg);
+    rotate: 3deg;
+  }
+  .signature__results :global(img) {
+    border-radius: calc(var(--r-md) - 6px);
+  }
+  .signature__results figcaption {
+    padding: 0.55rem 0 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--rose-gold-text);
+  }
+  .signature__body {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .signature__name {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .signature__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+  .signature__price {
+    font-size: var(--step-5);
+    line-height: 1;
+  }
+  .steps {
+    display: grid;
+    padding: 0;
+    margin: 0;
+    counter-reset: step;
+    border-top: 1px solid var(--line-strong);
+  }
+  .steps li {
+    display: grid;
+    grid-template-columns: 2.6rem 1fr;
+    gap: 0.9rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--rose-gold-text);
+  }
+  .steps strong {
+    display: block;
+    font-weight: 700;
+  }
+  .steps span {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .signature__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    .signature__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------------------------------------------------------- categories */
+  .categories__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .categories__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 2vw, 1.75rem);
+    padding: 0;
+    margin: 0;
+  }
+  .cat-card {
+    position: relative;
+    isolation: isolate;
+    display: block;
+    aspect-ratio: 3 / 4.2;
+    overflow: hidden;
+    border-radius: var(--r-lg);
+    color: var(--on-dark);
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+  }
+  .cat-card__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .cat-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--ease-out);
+  }
+  .cat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgb(43 26 36 / 0) 30%, rgb(43 26 36 / 0.88) 100%);
+  }
+  .cat-card:hover .cat-card__media :global(img) {
+    transform: scale(1.07);
+  }
+  .cat-card__arrow {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgb(255 255 255 / 0.5);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.18);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    transition:
+      transform 0.6s var(--ease-out),
+      background 0.4s;
+  }
+  .cat-card:hover .cat-card__arrow {
+    transform: rotate(45deg);
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .cat-card__body {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+    gap: 0.55rem;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .cat-card__num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: var(--petal);
+  }
+  .cat-card h3 {
+    font-size: var(--step-3);
+    color: #fff;
+  }
+  .cat-card p {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    font-size: var(--step--1);
+    color: var(--on-dark-soft);
+    transition:
+      max-height 0.7s var(--ease-out),
+      opacity 0.5s;
+  }
+  .cat-card:hover p,
+  .cat-card:focus-visible p {
+    max-height: 8em;
+    opacity: 1;
+  }
+  .cat-card__from {
+    font-size: var(--step--1);
+    color: var(--on-dark-soft);
+  }
+  .cat-card__from .price {
+    font-size: 1.6rem;
+    color: #fff;
+  }
+  @media (hover: none) {
+    .cat-card p {
+      max-height: none;
+      opacity: 1;
+    }
+  }
+  @media (max-width: 900px) {
+    .categories__grid {
+      grid-template-columns: 1fr;
+    }
+    .cat-card {
+      aspect-ratio: 4 / 3.8;
+    }
+  }
+
+  /* ---------------------------------------------------------------- journey */
+  .journey {
+    position: relative;
+    padding-block: var(--section-y);
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--on-dark);
+  }
+  .journey__viewport {
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .journey.is-hscroll {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    padding-block: 0;
+  }
+  .journey.is-hscroll .journey__viewport {
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .journey__track {
+    display: flex;
+    align-items: stretch;
+    gap: clamp(1rem, 2vw, 2rem);
+    width: max-content;
+  }
+  .journey__intro {
+    display: grid;
+    align-content: center;
+    gap: 1.25rem;
+    width: min(80vw, 440px);
+    padding-right: 2rem;
+    scroll-snap-align: start;
+  }
+  .journey__step {
+    position: relative;
+    display: grid;
+    align-content: end;
+    gap: 1rem;
+    width: min(78vw, 400px);
+    min-height: 26rem;
+    padding: 2.2rem;
+    border: 1px solid rgb(247 237 230 / 0.16);
+    border-radius: var(--r-lg);
+    background: linear-gradient(160deg, rgb(255 255 255 / 0.05), transparent);
+    scroll-snap-align: start;
+  }
+  .journey__num {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.75rem;
+    font-family: var(--font-display);
+    font-size: var(--step-6);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--petal);
+    opacity: 0.7;
+  }
+  .journey__step h3 {
+    color: #fff;
+  }
+  .journey__end {
+    display: grid;
+    place-items: center;
+    width: min(70vw, 320px);
+  }
+
+  /* ---------------------------------------------------------------- gallery */
+  .results :global(.outline-band) {
+    margin-bottom: 2rem;
+  }
+  .gallery {
+    columns: 4 220px;
+    column-gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    padding: 0;
+    margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+  }
+  .gallery__item {
+    break-inside: avoid;
+    margin-bottom: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+  .gallery__item figure {
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--r-md);
+    background: var(--blush);
+  }
+  .gallery__item :global(img) {
+    width: 100%;
+    height: auto;
+    transition: transform 1.2s var(--ease-out);
+  }
+  .gallery__item:hover :global(img) {
+    transform: scale(1.05);
+  }
+  .results__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  /* ---------------------------------------------------------------- reel */
+  .reel__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .reel__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+  }
+  .reel__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    transition: transform 1.2s var(--ease-out);
+  }
+  .reel__media:hover :global(img) {
+    transform: scale(1.04);
+  }
+  .reel__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgb(43 26 36 / 0.45));
+  }
+  .reel__play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 88px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgb(255 253 251 / 0.92);
+    color: var(--ink);
+    translate: -50% -50%;
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgb(255 253 251 / 0.55);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 24px rgb(255 253 251 / 0);
+    }
+  }
+  .reel__body {
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+  @media (max-width: 900px) {
+    .reel__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------------------------------------------------------- faq */
+  .faq-section__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .faq-section__head {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+  @media (max-width: 900px) {
+    .faq-section__grid {
+      grid-template-columns: 1fr;
+    }
+    .faq-section__head {
+      position: static;
+    }
+  }
+</style>

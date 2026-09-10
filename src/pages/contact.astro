@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContactSection from '../components/ContactSection.astro';
+---
+
+<Layout
+  title="Contact"
+  description="Get in touch with Glow With Chlo — call 07376 228588, email or send a message. Covering North Wales & Liverpool with a mobile service."
+>
+  <div class="contact-page">
+    <ContactSection headingLevel="h1" />
+  </div>
+</Layout>
+
+<style>
+  .contact-page {
+    padding-top: var(--header-h);
+    background: radial-gradient(60% 40% at 80% 0%, rgb(235 207 195 / 0.7), transparent 70%);
+  }
+</style>

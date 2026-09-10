@@ -1,0 +1,208 @@
+---
+import Icon from './Icon.astro';
+import Sprig from './Sprig.astro';
+import { reviews } from '../data/site';
+---
+
+<section class="section section--dark reviews" aria-labelledby="reviews-title">
+  <Sprig class="reviews__sprig reviews__sprig--l" />
+  <Sprig class="reviews__sprig reviews__sprig--r" flip />
+  <div class="container reviews__inner">
+    <p class="eyebrow" data-reveal>Kind words</p>
+    <h2 id="reviews-title" class="sr-only">Client reviews</h2>
+
+    <div class="reviews__carousel" data-carousel data-interval="6500" aria-roledescription="carousel" aria-label="Client reviews">
+      <div class="reviews__stars" role="img" aria-label="Rated 5 out of 5">
+        {Array.from({ length: 5 }, () => <Icon name="star" size={18} />)}
+      </div>
+
+      <div class="reviews__slides" aria-live="polite">
+        {
+          reviews.map((r, i) => (
+            <figure
+              class:list={['reviews__slide', { 'is-active': i === 0 }]}
+              data-slide
+              aria-roledescription="slide"
+              aria-label={`${i + 1} of ${reviews.length}`}
+              aria-hidden={i === 0 ? undefined : 'true'}
+            >
+              <blockquote>
+                <p>“{r.quote}”</p>
+              </blockquote>
+              <figcaption>A Glow With Chlo client</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+
+      <div class="reviews__controls">
+        <button type="button" class="reviews__btn" data-prev aria-label="Previous review">
+          <Icon name="arrow-right" size={18} class="flip-x" />
+        </button>
+        <div class="reviews__dots" role="group" aria-label="Choose review">
+          {
+            reviews.map((_, i) => (
+              <button
+                type="button"
+                class:list={['reviews__dot', { 'is-active': i === 0 }]}
+                data-dot={i}
+                aria-label={`Show review ${i + 1}`}
+                aria-current={i === 0 ? 'true' : undefined}
+              >
+                <span />
+              </button>
+            ))
+          }
+        </div>
+        <button type="button" class="reviews__btn" data-next aria-label="Next review">
+          <Icon name="arrow-right" size={18} />
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews {
+    overflow: hidden;
+  }
+  .reviews__inner {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+  .reviews :global(.reviews__sprig) {
+    position: absolute;
+    width: clamp(70px, 10vw, 140px);
+    color: var(--petal);
+    opacity: 0.35;
+    top: 50%;
+    translate: 0 -50%;
+  }
+  .reviews :global(.reviews__sprig--l) {
+    left: 3%;
+  }
+  .reviews :global(.reviews__sprig--r) {
+    right: 3%;
+  }
+  .reviews__carousel {
+    display: grid;
+    justify-items: center;
+    gap: 2.25rem;
+    width: 100%;
+  }
+  .reviews__stars {
+    display: flex;
+    gap: 0.3rem;
+    color: var(--petal);
+  }
+  .reviews__slides {
+    display: grid;
+    width: 100%;
+    max-width: 58rem;
+    min-height: 12rem;
+  }
+  .reviews__slide {
+    grid-area: 1 / 1;
+    display: grid;
+    align-content: center;
+    gap: 1.75rem;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(18px);
+    transition:
+      opacity 0.8s var(--ease-out),
+      transform 1s var(--ease-out),
+      visibility 0s linear 0.8s;
+  }
+  .reviews__slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0.15s, 0.15s, 0s;
+  }
+  .reviews__slide blockquote {
+    margin: 0;
+  }
+  .reviews__slide p {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--on-dark);
+    text-wrap: balance;
+  }
+  .reviews__slide figcaption {
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--petal);
+  }
+  .reviews__controls {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .reviews__btn {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgb(247 237 230 / 0.3);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--on-dark);
+    transition:
+      background 0.4s var(--ease-out),
+      color 0.4s;
+  }
+  .reviews__btn:hover {
+    background: var(--on-dark);
+    color: var(--ink);
+  }
+  .reviews__btn :global(.flip-x) {
+    transform: scaleX(-1);
+  }
+  .reviews__dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .reviews__dot {
+    width: 44px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    display: grid;
+    align-items: center;
+  }
+  .reviews__dot span {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background: rgb(247 237 230 / 0.25);
+    overflow: hidden;
+    position: relative;
+  }
+  .reviews__dot span::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--petal);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .reviews__dot.is-active span::after {
+    transform: scaleX(1);
+    transition: transform var(--carousel-interval, 6.5s) linear;
+  }
+  :global([data-carousel].is-paused) .reviews__dot.is-active span::after {
+    transition: none;
+    transform: scaleX(1);
+  }
+</style>

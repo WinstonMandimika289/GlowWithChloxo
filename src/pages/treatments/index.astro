@@ -1,0 +1,251 @@
+---
+import { Picture } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import Icon from '../../components/Icon.astro';
+import { img } from '../../lib/images';
+import { site } from '../../data/site';
+import { facials, facialFilters, getService, formatPrice, serviceHref } from '../../data/services';
+
+const pairs = facials
+  .filter((s) => s.slug.startsWith('deluxe-'))
+  .map((deluxe) => ({ deluxe, base: getService(deluxe.slug.replace(/^deluxe-/, ''))! }))
+  .filter((p) => p.base)
+  .sort((a, b) => a.base.price - b.base.price);
+const profhilo = getService('profhilo')!;
+---
+
+<Layout
+  title="Facials"
+  description="Dermaplaning, mesotherapy and combination facials in North Wales & Liverpool, from £20. Deluxe upgrades, mobile service and consultation-led results."
+  image="photos/facial-profile-dewy.jpg"
+>
+  <PageHero
+    eyebrow="Facials"
+    title="Facials for every <em>glow</em> goal"
+    lead="From a 40-minute refresh to our signature deluxe combination — every facial is tailored to your skin at consultation."
+    image="photos/facial-profile-dewy.jpg"
+    imageAlt="Client in profile with dewy, glowing skin after a facial"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Facials' }]}
+  >
+    <Fragment slot="actions">
+      <a class="btn" href={site.booking} target="_blank" rel="noopener" data-magnetic>
+        Book a facial <Icon name="arrow" class="btn__icon" size={16} />
+      </a>
+      <button type="button" class="btn btn--ghost" data-chat-open data-chat-ask="Which facial suits me?">
+        <Icon name="chat" size={18} /> Help me choose
+      </button>
+    </Fragment>
+  </PageHero>
+
+  <section class="section treatments" aria-label="All facials">
+    <div class="container">
+      <div class="filters" role="group" aria-label="Filter facials" data-filter-group="#facial-grid" data-reveal>
+        {
+          facialFilters.map((f, i) => (
+            <button type="button" class="filter" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+              {f.label}
+            </button>
+          ))
+        }
+        <p class="filters__count" data-filter-status aria-live="polite">{facials.length} treatments</p>
+      </div>
+      <ul class="cards-grid" id="facial-grid" role="list" data-reveal-stagger>
+        {
+          facials.map((s) => (
+            <li data-filter-item>
+              <ServiceCard service={s} headingLevel="h2" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--blush deluxe" aria-labelledby="deluxe-title">
+    <div class="container deluxe__grid">
+      <SectionHeading
+        id="deluxe-title"
+        eyebrow="Standard or Deluxe?"
+        title="Upgrade to <em>Deluxe</em> for £10"
+        lead="Every Deluxe facial swaps the refreshing double cleanse for the full ritual: double cleanse, exfoliation, a mask and a relaxing scalp massage."
+      />
+      <div class="deluxe__table-wrap" data-reveal>
+        <table class="deluxe__table">
+          <caption class="sr-only">Standard and Deluxe facial prices</caption>
+          <thead>
+            <tr>
+              <th scope="col">Facial</th>
+              <th scope="col">Standard</th>
+              <th scope="col">Deluxe</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              pairs.map((p) => (
+                <tr>
+                  <th scope="row">{p.base.name}</th>
+                  <td>
+                    <a href={serviceHref(p.base)} class="price">{formatPrice(p.base.price)}</a>
+                  </td>
+                  <td>
+                    <a href={serviceHref(p.deluxe)} class="price">{formatPrice(p.deluxe.price)}</a>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section boosters-teaser" aria-labelledby="boosters-teaser-title">
+    <div class="container">
+      <a class="teaser-card" href="/skin-boosters" data-reveal>
+        <div class="teaser-card__media">
+          <Picture
+            src={img(profhilo.image!)}
+            alt={profhilo.imageAlt ?? ''}
+            formats={['avif', 'webp']}
+            widths={[320, 560]}
+            sizes="(max-width: 700px) 90vw, 30vw"
+          />
+        </div>
+        <div class="teaser-card__body">
+          <p class="eyebrow">Ready for more?</p>
+          <h2 id="boosters-teaser-title" class="h2">Skin boosters &amp; <em>Profhilo</em></h2>
+          <p class="muted">
+            Injectable hydration for firmer, plumper skin — from {formatPrice(Math.min(30, profhilo.price))}. Always
+            consultation-first.
+          </p>
+          <span class="link-arrow">Explore skin boosters <Icon name="arrow-right" size={16} /></span>
+        </div>
+      </a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+  .filter {
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-pill);
+    background: transparent;
+    font-size: var(--step--1);
+    font-weight: 600;
+    transition:
+      background 0.35s,
+      color 0.35s,
+      border-color 0.35s;
+  }
+  .filter:hover {
+    border-color: var(--ink);
+  }
+  .filter[aria-pressed='true'] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .filters__count {
+    margin-left: auto;
+    font-size: var(--step--1);
+    color: var(--ink-mute);
+  }
+
+  .deluxe__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .deluxe__table-wrap {
+    overflow-x: auto;
+    border-radius: var(--r-lg);
+    background: var(--paper);
+    box-shadow: var(--shadow-md);
+  }
+  .deluxe__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .deluxe__table th,
+  .deluxe__table td {
+    padding: 1.15rem 1.4rem;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+  .deluxe__table thead th {
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose-gold-text);
+  }
+  .deluxe__table tbody th {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 400;
+  }
+  .deluxe__table tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+  .deluxe__table .price {
+    font-size: var(--step-2);
+    text-decoration: none;
+  }
+  .deluxe__table td:last-child .price {
+    color: var(--rose-gold-text);
+  }
+
+  .teaser-card {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border: 1px solid var(--line);
+    border-radius: var(--r-xl);
+    background: var(--paper);
+    text-decoration: none;
+    transition:
+      box-shadow 0.6s var(--ease-out),
+      transform 0.6s var(--ease-out);
+  }
+  .teaser-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  .teaser-card__media {
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: var(--r-lg);
+    background: #fff;
+  }
+  .teaser-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .teaser-card__body {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .deluxe__grid,
+    .teaser-card {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

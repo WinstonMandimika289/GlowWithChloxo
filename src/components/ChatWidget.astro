@@ -1,0 +1,423 @@
+---
+import Icon from './Icon.astro';
+import { CHAT } from '../lib/chatConfig';
+---
+
+<div class="chat" data-chat transition:persist="chat">
+  <div class="chat__teaser" data-chat-teaser hidden>
+    <button type="button" class="chat__teaser-open" data-chat-teaser-open>Hi there ✨ Need help choosing a treatment?</button>
+    <button type="button" class="chat__teaser-close" data-chat-teaser-close aria-label="Dismiss">
+      <Icon name="close" size={14} />
+    </button>
+  </div>
+
+  <section class="chat__panel" id="chat-panel" data-chat-panel role="dialog" aria-labelledby="chat-title" hidden>
+    <header class="chat__head">
+      <span class="chat__avatar" aria-hidden="true">G</span>
+      <div class="chat__head-text">
+        <h2 id="chat-title" class="chat__title">Glow assistant</h2>
+        <p class="chat__status"><span class="chat__dot" aria-hidden="true"></span><span data-chat-mode>Here to help</span></p>
+      </div>
+      <button type="button" class="chat__icon-btn" data-chat-reset aria-label="Start a new conversation" title="New conversation">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      </button>
+      <button type="button" class="chat__icon-btn" data-chat-close aria-label="Close chat">
+        <Icon name="close" size={17} />
+      </button>
+    </header>
+
+    <div class="chat__log" data-chat-log data-lenis-prevent role="log" aria-live="polite" aria-relevant="additions"></div>
+    <div class="chat__chips" data-chat-chips></div>
+
+    <form class="chat__form" data-chat-form data-astro-reload>
+      <label for="chat-input" class="sr-only">Type your message</label>
+      <textarea
+        id="chat-input"
+        data-chat-input
+        rows="1"
+        maxlength={CHAT.maxInputChars}
+        placeholder="Ask about treatments, prices, booking…"
+        autocomplete="off"></textarea>
+      <button type="submit" class="chat__send" aria-label="Send message">
+        <Icon name="send" size={18} />
+      </button>
+    </form>
+    <p class="chat__note">Guidance only — Chlo confirms everything at your consultation.</p>
+  </section>
+
+  <button type="button" class="chat__launcher" data-chat-launcher aria-expanded="false" aria-controls="chat-panel">
+    <span class="chat__launcher-icon"><Icon name="chat" size={22} /></span>
+    <span class="chat__launcher-label">Ask Glow</span>
+  </button>
+</div>
+
+<style is:global>
+  .chat {
+    position: fixed;
+    right: clamp(12px, 2vw, 24px);
+    bottom: clamp(12px, 2vw, 24px);
+    z-index: 120;
+    display: grid;
+    justify-items: end;
+    gap: 0.75rem;
+    font-size: 15px;
+  }
+  .chat__launcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.5rem 1.25rem 0.5rem 0.5rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 0 18px 40px -14px rgb(43 26 36 / 0.55);
+    transition:
+      transform 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out);
+  }
+  .chat__launcher:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 24px 50px -16px rgb(43 26 36 / 0.6);
+  }
+  .chat__launcher-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--sheen);
+    color: var(--ink);
+  }
+  .chat__launcher-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    animation: chat-ping 2.6s var(--ease-out) infinite;
+  }
+  .chat.is-open .chat__launcher-icon::after,
+  .chat[data-mode] .chat__launcher-icon::after {
+    animation: none;
+  }
+  @keyframes chat-ping {
+    0% {
+      box-shadow: 0 0 0 0 rgb(232 185 170 / 0.7);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 14px rgb(232 185 170 / 0);
+    }
+  }
+
+  .chat__teaser {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.3rem 0.3rem 0.3rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    box-shadow: var(--shadow-md);
+    animation: chat-in 0.6s var(--ease-out);
+  }
+  .chat__teaser[hidden] {
+    display: none;
+  }
+  .chat__teaser-open {
+    padding: 0.4rem 0;
+    border: 0;
+    background: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .chat__teaser-close {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-mute);
+  }
+
+  .chat__panel {
+    display: flex;
+    flex-direction: column;
+    width: min(400px, calc(100vw - 24px));
+    height: min(640px, calc(100dvh - 110px));
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: var(--cream);
+    box-shadow: 0 30px 80px -20px rgb(43 26 36 / 0.45);
+    transform-origin: bottom right;
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    transition:
+      opacity 0.35s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+  .chat__panel[hidden] {
+    display: none;
+  }
+  .chat.is-open .chat__panel {
+    opacity: 1;
+    transform: none;
+  }
+  .chat__head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 0.9rem 0.9rem 1rem;
+    background: var(--ink);
+    color: var(--on-dark);
+  }
+  .chat__avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--sheen);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.3rem;
+  }
+  .chat__head-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .chat__title {
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: #fff;
+  }
+  .chat__status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.74rem;
+    color: var(--on-dark-soft);
+  }
+  .chat__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #6fcf8f;
+    box-shadow: 0 0 0 3px rgb(111 207 143 / 0.2);
+  }
+  .chat__icon-btn {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgb(247 237 230 / 0.2);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--on-dark);
+    transition: background 0.3s;
+  }
+  .chat__icon-btn:hover {
+    background: rgb(247 237 230 / 0.12);
+  }
+
+  .chat__log {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .chat-msg {
+    display: flex;
+    max-width: 88%;
+    animation: chat-in 0.45s var(--ease-out);
+  }
+  .chat-msg--user {
+    align-self: flex-end;
+  }
+  .chat-msg__bubble {
+    padding: 0.7rem 0.95rem;
+    border-radius: 18px;
+    font-size: 0.93rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .chat-msg--assistant .chat-msg__bubble {
+    border: 1px solid var(--line);
+    border-bottom-left-radius: 6px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .chat-msg--user .chat-msg__bubble {
+    border-bottom-right-radius: 6px;
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .chat-msg__bubble p + p,
+  .chat-msg__bubble p + ul,
+  .chat-msg__bubble ul + p {
+    margin-top: 0.5rem;
+  }
+  .chat-msg__bubble ul {
+    margin: 0.35rem 0 0;
+    padding-left: 1.1rem;
+  }
+  .chat-msg__bubble li + li {
+    margin-top: 0.2rem;
+  }
+  .chat-msg__bubble a {
+    color: var(--rose-gold-text);
+    font-weight: 700;
+  }
+  .chat-msg--typing .chat-msg__bubble {
+    display: flex;
+    gap: 4px;
+    padding: 0.95rem 1rem;
+  }
+  .chat-msg--typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--rose-gold);
+    animation: chat-blink 1.2s infinite;
+  }
+  .chat-msg--typing span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .chat-msg--typing span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  @keyframes chat-blink {
+    0%,
+    80%,
+    100% {
+      opacity: 0.25;
+      transform: translateY(0);
+    }
+    40% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+  @keyframes chat-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .chat__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.2rem 1rem 0.6rem;
+  }
+  .chat__chips:empty {
+    display: none;
+  }
+  .chat-chip {
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--paper);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    transition:
+      background 0.3s,
+      color 0.3s,
+      border-color 0.3s;
+  }
+  .chat-chip:hover {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .chat__form {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem 0.5rem;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .chat__form textarea {
+    flex: 1;
+    min-height: 44px;
+    max-height: 120px;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    background: var(--cream);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    resize: none;
+  }
+  .chat__form textarea:focus {
+    outline: none;
+    border-color: var(--rose-gold-text);
+    box-shadow: 0 0 0 3px rgb(185 128 106 / 0.18);
+  }
+  .chat__send {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--cream);
+    transition: background 0.3s;
+  }
+  .chat__send:hover {
+    background: var(--rose-gold-text);
+  }
+  .chat__form.is-busy .chat__send {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .chat__note {
+    padding: 0 1rem 0.7rem;
+    background: var(--paper);
+    font-size: 0.7rem;
+    text-align: center;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 560px) {
+    .chat__launcher {
+      padding: 0.45rem;
+    }
+    .chat__launcher-label {
+      display: none;
+    }
+    .chat.is-open {
+      inset: 0;
+    }
+    .chat.is-open .chat__panel {
+      width: 100vw;
+      height: 100dvh;
+      border: 0;
+      border-radius: 0;
+    }
+    .chat.is-open .chat__launcher,
+    .chat.is-open .chat__teaser {
+      display: none;
+    }
+  }
+</style>

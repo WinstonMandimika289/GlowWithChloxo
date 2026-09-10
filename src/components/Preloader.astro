@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo.png';
+---
+
+<!-- Shown once per session (html.first-visit), only when motion is allowed. -->
+<div class="preloader" data-preloader aria-hidden="true">
+  <div class="preloader__inner">
+    <Image src={logo} alt="" width={180} class="preloader__logo" loading="eager" />
+    <p class="preloader__word"><span>Glow</span> <em>with</em> <span>Chlo</span></p>
+    <span class="preloader__line"><span data-preloader-bar></span></span>
+  </div>
+</div>
+
+<style>
+  .preloader {
+    display: none;
+  }
+  :global(html.first-visit.motion) .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    background: var(--cream);
+    /* CSS failsafe in case the script never runs */
+    animation: preloader-failsafe 0.6s var(--ease-out) 3.2s forwards;
+  }
+  .preloader__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.1rem;
+  }
+  .preloader__logo {
+    width: clamp(120px, 22vw, 180px);
+    mix-blend-mode: multiply;
+    animation: preloader-spin 1.6s var(--ease-out) both;
+  }
+  .preloader__word {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    letter-spacing: -0.01em;
+    animation: preloader-rise 1s var(--ease-out) 0.25s both;
+  }
+  .preloader__word em {
+    font-style: italic;
+    color: var(--rose-gold);
+  }
+  .preloader__line {
+    display: block;
+    width: 140px;
+    height: 1px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .preloader__line span {
+    display: block;
+    height: 100%;
+    background: var(--rose-gold);
+    transform-origin: left;
+    animation: preloader-bar 1.4s var(--ease-in-out) 0.2s both;
+  }
+  @keyframes preloader-spin {
+    from {
+      opacity: 0;
+      transform: rotate(-40deg) scale(0.85);
+    }
+  }
+  @keyframes preloader-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  @keyframes preloader-bar {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes preloader-failsafe {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+</style>
